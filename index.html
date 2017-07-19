@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <form onchange="
+    if (this.querySelector('#fruity_prompt').value == 'yes') {
+      this.querySelector('#favorite_fruit_section').hidden = false
+    }
+    else {
+      this.querySelector('#favorite_fruit_section').hidden = true 
+    }
+  ">
+    <p>
+      Would you like to answer a fruity question?
+      <select id="fruity_prompt">
+        <option value=""></option>
+        <option value="yes">yes</option>
+        <option value="no">no</option>
+      </select>
+    </p>
+    <p id="favorite_fruit_section" hidden>
+      What is your favorite fruit? 
+      <select id="favorite_fruit">
+        <option value="tangerine">tangerine</option>
+        <option value="cherries">cherries</option>
+        <option value="banana">banana</option>
+      </select>
+    </p>
+  </form>
