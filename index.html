@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <body>
+
   <form onchange="
-    if (this.querySelector('#fruity_prompt').value == 'yes') {
-      this.querySelector('#favorite_fruit_section').hidden = false
+    if (this.fruity_prompt.value == 'yes') {
+      this.children.favorite_fruit_section.hidden = false
     }
     else {
-      this.querySelector('#favorite_fruit_section').hidden = true 
+      this.children.favorite_fruit_section.hidden = true 
     }
   ">
     <p>
@@ -26,3 +27,6 @@
       </select>
     </p>
   </form>
+
+</body>
+</html>
