@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<style>
+  input:invalid {
+    border: 3px solid red;
+  }
+  :invalid {
+    border: 1px solid #CCC;
+  }
+</style>
+
+<script>
+  function debug(form, event) {
+    debugger
+  }
+</script>
+
+  <form  onchange=" // debug(this, event)
+    if (this.fruity_prompt.value == 'yes') {
+      this.children.favorite_fruit_section.hidden = false
+      this.children.favorite_fruit_section.required = true 
+    }
+    else {
+      this.children.favorite_fruit_section.hidden = true 
+      this.children.favorite_fruit_section.required = false
+    }
+    ">
+    <p>
+      Would you like to answer a fruity question?
+      <select id="fruity_prompt" required>
+        <option value=""></option>
+        <option value="yes">yes</option>
+        <option value="no">no</option>
+      </select>
+    </p>
+    <p id="favorite_fruit_section" hidden>
+      What is your favorite fruit? 
+      <select id="favorite_fruit">
+        <option value="tangerine">tangerine</option>
+        <option value="cherries">cherries</option>
+        <option value="banana">banana</option>
+      </select>
+    </p>
+    <label for="contact_telephone">Telephone number:</label><input id="contact_telephone" type="tel" pattern="\d{3}[\-]\d{3}[\-]\d{4}"> <br>
+    
+    <button type="submit" formaction="page2.html"> Next page </button>
+  </form>
+
+</body>
+</html>

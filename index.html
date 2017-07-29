@@ -1,32 +1,10 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<import
 <body>
-
-  <form onchange="
-    if (this.fruity_prompt.value == 'yes') {
-      this.children.favorite_fruit_section.hidden = false
-    }
-    else {
-      this.children.favorite_fruit_section.hidden = true 
-    }
+<tangy-form onbeforetransition="
+  if (this.lastPage == 'page1' && this.form.wants_to_proceed.checked == true) this.skip()
+  if (this.lastPage == 'page2') alert('Thanks for filling out our tangy form!')
   ">
-    <p>
-      Would you like to answer a fruity question?
-      <select id="fruity_prompt">
-        <option value=""></option>
-        <option value="yes">yes</option>
-        <option value="no">no</option>
-      </select>
-    </p>
-    <p id="favorite_fruit_section" hidden>
-      What is your favorite fruit? 
-      <select id="favorite_fruit">
-        <option value="tangerine">tangerine</option>
-        <option value="cherries">cherries</option>
-        <option value="banana">banana</option>
-      </select>
-    </p>
-  </form>
-
-</body>
-</html>
+  <tangy-page id="page1" src="page1.html">
+  <tangy-page id="page2" src="page2.html">
+</tangy-multipage-form>
