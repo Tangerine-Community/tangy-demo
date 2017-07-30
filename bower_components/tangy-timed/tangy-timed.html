@@ -34,10 +34,6 @@
       static get is() { return 'tangy-timed'; }
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'tangy-timed'
-          },
           timeRemaining: {
             type: Number,
             value: 60 
@@ -56,7 +52,6 @@
       // Element class can define custom element reactions
       connectedCallback() {
         super.connectedCallback();
-        console.log('my-element created!');
       }
     
       ready() {
