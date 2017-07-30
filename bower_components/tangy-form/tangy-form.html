@@ -1,0 +1,75 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="tangy-form">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <slot></slot>
+  </template>
+
+  <script>
+    /**
+     * `tangy-form`
+     * An element used to encapsulate form elements for multipage forms with a session in localStorage
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class TangyForm extends Polymer.Element {
+      static get is() { return 'tangy-form'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'tangy-form'
+          }
+        };
+      }
+      ready() {
+        super.ready();
+        this.preparedForSubmit = false
+        this.form = this.querySelector('form');
+        this.session = window.localStorage.getItem(`tangy_form_session_${this.id}`, JSON.stringify(this.session));
+        if (this.session === "undefined") {
+          this.session = {}
+        } else {
+          this.session = JSON.parse(this.session);
+        }
+        for (const element of this.form.elements) {
+          if (this.session.hasOwnProperty(element.name)) {
+            if (element.type === 'checkbox') {
+              element.checked = this.session[element.name]
+            } else {
+              element.value = this.session[element.name]
+            }
+          } 
+        }
+        this.form.addEventListener('submit', (event) => {
+          if (preparedForSubmit === false) {
+            event.preventDefault()
+            for (const element of this.form.elements) {
+              const change = new Event('change')
+              if (element.type === 'checkbox') {
+                this.session[element.name] = element.checked
+                element.dispatchEvent(change, {bubbles: true})
+              } else {
+                this.session[element.name] = element.value
+                element.dispatchEvent(change, {bubbles: true})
+              }
+            }
+            window.localStorage.setItem(`tangy_form_session_${this.id}`, JSON.stringify(this.session));
+            this.preparedForSubmit = true
+            this.form.submit()
+          }
+        })
+      }
+       
+    }
+
+    window.customElements.define(TangyForm.is, TangyForm);
+  </script>
+</dom-module>
