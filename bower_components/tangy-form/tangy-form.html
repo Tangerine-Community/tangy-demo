@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<script src="../pouchdb/dist/pouchdb.js"></script>
 
 <dom-module id="tangy-form">
   <template>
@@ -30,18 +31,30 @@
         };
       }
 
-      ready() {
+      async ready() {
         super.ready();
-        this.preparedForSubmit = false
-        this.form = this.querySelector('form');
         // Get our session.
-        this.session = window.localStorage.getItem(`tangy_form_session_${this.id}`, JSON.stringify(this.session));
-        if (this.session === "undefined" || !this.session) {
-          this.session = {}
-        } else {
-          this.session = JSON.parse(this.session);
+        this.db = new PouchDB('tangy-form')
+        try {
+          var currentSessionInfo = await this.db.get(`current_session_info_${this.id}`);
+          this.session = await this.db.get(currentSessionInfo.sessionId)
+        }
+        catch(e) {
+          // Create a new session document.
+          const response = await this.db.post({
+            type: 'tangy-form-session',
+            formId: this.id
+          })
+          // Get the session from the db.
+          this.session = await this.db.get(response.id)
+          // Save that as the current session.
+          await this.db.put({
+            _id: `current_session_info_${this.id}`,
+            sessionId: this.session._id 
+          })
         }
         // Load session into DOM
+        this.form = this.querySelector('form');
         for (const element of this.form.elements) {
           if (this.session.hasOwnProperty(element.name)) {
             const change = new Event('change')
@@ -55,7 +68,8 @@
           } 
         }
         // Listen for a submit of the form.
-        this.form.addEventListener('submit', (event) => {
+        this.preparedForSubmit = false
+        this.form.addEventListener('submit', async (event) => {
           if (this.preparedForSubmit === false) {
             event.preventDefault()
             for (const element of this.form.elements) {
@@ -68,7 +82,7 @@
                 element.dispatchEvent(change, {bubbles: true})
               }
             }
-            window.localStorage.setItem(`tangy_form_session_${this.id}`, JSON.stringify(this.session));
+            await this.db.put(this.session);
             this.preparedForSubmit = true
             this.form.submit()
           }

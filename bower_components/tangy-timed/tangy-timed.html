@@ -62,6 +62,11 @@
         super.ready();
         // Set our countdown to the desired duration.
         this.timeRemaining = this.duration;
+        // @TODO: Need to listen to slot for ready.
+        setTimeout(() => this._prepareForm(), 200)
+      }
+
+      _prepareForm() {
         // Find all our input elements.
         this.inputElements = Array.prototype.slice.call(this.querySelectorAll('input'));
         // Disable all the input elements. Will enable on start.

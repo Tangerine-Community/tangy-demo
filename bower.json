@@ -18,6 +18,7 @@
     "iron-form": "PolymerElements/iron-form#^2.0.0",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.0.0",
     "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1",
-    "paper-card": "PolymerElements/paper-card#^2.0.0"
+    "paper-card": "PolymerElements/paper-card#^2.0.0",
+    "pouchdb": "^6.3.4"
   }
 }
