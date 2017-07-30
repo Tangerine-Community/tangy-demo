@@ -5,65 +5,44 @@
   <link rel="import" href="bower_components/tangy-form/tangy-form.html">
 </head>
 <body>
-  <tangy-form id="tangy1">
-  <form action="tangy-timer-example--page-2.html">
-    <tangy-timed id="timer1" duration=10>
-      <table>
-        <tbody>
-          <tr>
-            <td> <input id="L1" name="L1" type="checkbox" > <label  for="L1"> L </label> </td>
-            <td> <input id="i1" name="i1" type="checkbox" > <label  for="i1">i </label> </td>
-            <td> <input id="h1" name="h1" type="checkbox" > <label  for="h1">h </label> </td>
-            <td> <input id="R1" name="R1" type="checkbox" > <label  for="R1">R </label> </td>
-            <td> <input id="S1" name="S1" type="checkbox" > <label  for="S1">S </label> </td>
-            <td> <input id="y1" name="y1" type="checkbox" > <label  for="y1">y </label> </td>
-            <td> <input id="E1" name="E1" type="checkbox" > <label  for="E1">E </label> </td>
-            <td> <input id="O1" name="O1" type="checkbox" > <label  for="O1">O </label> </td>
-            <td> <input id="w1" name="w1" type="checkbox" > <label  for="w1">w </label> </td>
-            <td> <input id="T1" name="T1" type="checkbox" > <label  for="T1">T </label> </td>
-          </tr>
-          <tr>
-            <td> <input id="i2" name="i2" type="checkbox" > <label  for="i2">i</label> </td>
-            <td> <input id="e2" name="e2" type="checkbox" > <label  for="e2">e</label> </td>
-            <td> <input id="T2" name="T2" type="checkbox" > <label  for="T2">T</label> </td>
-            <td> <input id="E2" name="E2" type="checkbox" > <label  for="E2">E</label> </td>
-            <td> <input id="F2" name="F2" type="checkbox" > <label  for="F2">F</label> </td>
-            <td> <input id="t2" name="t2" type="checkbox" > <label  for="t2">t</label> </td>
-            <td> <input id="a2" name="a2" type="checkbox" > <label  for="a2">a</label> </td>
-            <td> <input id="d2" name="d2" type="checkbox" > <label  for="d2">d</label> </td>
-            <td> <input id="n2" name="n2" type="checkbox" > <label  for="n2">n</label> </td>
-            <td> <input id="e2" name="e2" type="checkbox" > <label  for="e2">e</label> </td>
-          </tr>
-          <tr>
-            <td> <input id="h3" name="h3" type="checkbox" > <label  for="h3">h</label> </td>
-            <td> <input id="O3" name="O3" type="checkbox" > <label  for="O3">O</label> </td>
-            <td> <input id="A3" name="A3" type="checkbox" > <label  for="A3">A</label> </td>
-            <td> <input id="m3" name="m3" type="checkbox" > <label  for="m3">m</label> </td>
-            <td> <input id="U3" name="U3" type="checkbox" > <label  for="U3">U</label> </td>
-            <td> <input id="r3" name="r3" type="checkbox" > <label  for="r3">r</label> </td>
-            <td> <input id="L3" name="L3" type="checkbox" > <label  for="L3">L</label> </td>
-            <td> <input id="G3" name="G3" type="checkbox" > <label  for="G3">G</label> </td>
-            <td> <input id="R3" name="R3" type="checkbox" > <label  for="R3">R</label> </td>
-            <td> <input id="u3" name="u3" type="checkbox" > <label  for="u3">u</label> </td>
-          </tr>
-        </tbody>
-      </table>
-      <input name="timer1_time_remaining" id="timer1_time_remaining" type="hidden">
-      <input name="timer1_time_spent" id="timer1_time_spent" type="hidden">
-      <input name="timer1_last_selected_id" id="timer1_last_selected_id" type="hidden">
-      <input name="timer1_last_selected_nth" id="timer1_last_selected_nth" type="hidden">
-      <input name="timer1_items_per_minute" id="timer1_items_per_minute" type="hidden">
-      <input name="timer1_number_of_items_marked" id="timer1_number_of_items_marked" type="hidden"> 
-    </tangy-timed>
-    <input type="submit" value="done">
-  </form>
-  </tangy-form>
+  <tangy-form id="fruity-html-form">
+    <form action="page-2.html" onchange="
+      console.log(this.elements.timer2_number_of_items_marked.value)
+      if (this.elements.timer2_number_of_items_marked.value > 0) this.children.send_me_fruit_prompt.hidden = false
+      if (this.elements.send_me_fruit.checked === true) this.children.offer_fruit.hidden = false
+    
+    ">
+        <tangy-timed id="timer2" duration=3>
+            Which type of fruits do you recognize?
+            <table>
+                <tr>
+                    <td> <input name="pear" id="pear" type="checkbox"> <label for="pear"> pear </label> </td>
+                    <td> <input name="mango" id="mango" type="checkbox" > <label for="mango"> mango </label> </td>
+                    <td> <input name="peach" id="peach" type="checkbox"> <label for="peach"> peach </label> </td>
+                </tr>
+                <tr>
+                    <td> <input name="kiwi" id="kiwi" type="checkbox" > <label for="kiwi"> kiwi </label> </td>
+                    <td> <input name="pineapple" id="pineapple" type="checkbox"  /> <label for="pineapple"> pineapple </label> </td>
+                    <td> <input name="coconut" id="coconut" type="checkbox"> <label for="coconut"> coconut </label> </td>
+                </tr> 
+            </table>
+            <input name="timer2_time_remaining" id="timer2_time_remaining" type="hidden">
+            <input name="timer2_time_spent" id="timer2_time_spent" type="hidden">
+            <input name="timer2_last_selected_id" id="timer2_last_selected_id" type="hidden">
+            <input name="timer2_last_selected_nth" id="timer2_last_selected_nth" type="hidden">
+            <input name="timer2_items_per_minute" id="timer2_items_per_minute" type="hidden">
+            <input name="timer2_number_of_items_marked" id="timer2_number_of_items_marked" type="hidden"> 
+        </tangy-timed>
 
-<script>
-  function debug(form, event) {
-    debugger
-  }
-</script>
+        <fieldset id="send_me_fruit_prompt" hidden>
+            <input name="send_me_fruit" type="checkbox" id="send_me_fruit"><label for="send_me_fruit">Would you like us to send you some of the fruit you've never seen?</label>
+        </fieldset>
+        <div id="offer_fruit" hidden>
+            <img width=300 id="offer_fruit" src="assets/fruit-bowl.gif"> <br>
+        </div>
+        <input type="submit" value="done">
+    </form>
+  </tangy-form>
 
 </body>
 </html>
