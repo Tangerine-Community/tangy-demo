@@ -8,17 +8,14 @@
         display: block;
       }
     </style>
-    <paper-card>
-      <span class="countdown">[[timeRemaining]]⏱</span>
-      <span> [[statusMessage]] </span>
-      <div>
-        <button on-click="clickedStart">start timer</button>
-        <button on-click="clickedStop">stop timer</button>
-        <button on-click="clickedReset">reset timer</button>
-      </div>
-      <slot></slot>
-    </paper-card>
- 
+    <span class="countdown">[[timeRemaining]]⏱</span>
+    <span> [[statusMessage]] </span>
+    <div>
+      <button on-click="clickedStart">start timer</button>
+      <button on-click="clickedStop">stop timer</button>
+      <button on-click="clickedReset">reset timer</button>
+    </div>
+    <slot></slot>
   </template>
 
   <script>
@@ -54,6 +51,7 @@
       }
 
       // Element class can define custom element reactions
+      // @TODO: Duplicating ready?
       connectedCallback() {
         super.connectedCallback();
       }
