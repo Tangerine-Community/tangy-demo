@@ -71,34 +71,31 @@
               event.srcElement.checked = !event.srcElement.checked;
               // Style the label.
               const labelEl = event.srcElement.labels[0];
-              // @TODO: This won't work because Angular styles don't work on native elements. Really?
-              labelEl.className = 'lastInput';
-              // ... but inline styles do.
               labelEl.setAttribute('style', 'color:red; border: 1px solid blue;'); ;
               this.statusMessage = 'You may now proceed.';
-              /*
-              // @TODO Show some visual indication of the status of this being valid and done. Maybe similar to
-              // ... TangerineFormCardComponent that animates to Green when complete.
-              // Set hidden variables.
+              //
+              // Set hidden values.
+              //
               // Last selected id.
-              const lastSelectedIdInputEl = this.elementRef.nativeElement.querySelector('#' + this.id + '_last_selected_id');
+              const lastSelectedIdInputEl = this.querySelector('#' + this.id + '_last_selected_id');
               lastSelectedIdInputEl.value = event.srcElement.id;
-              lastSelectedIdInputEl.dispatchEvent(new Event('change', {bubbles: true}));
               // Last selected nth item.
-              const lastSelectedNthInputEl = this.elementRef.nativeElement.querySelector('#' + this.id + '_last_selected_nth');
+              const lastSelectedNthInputEl = this.querySelector('#' + this.id + '_last_selected_nth');
               lastSelectedNthInputEl.value = this.inputElements.findIndex((el) => el.id === event.srcElement.id) + 1;
-              lastSelectedNthInputEl.dispatchEvent(new Event('change', {bubbles: true}));
+              // Time remaining.
+              const timeRemainingInputEl = this.querySelector('#' + this.id + '_time_remaining');
+              timeRemainingInputEl.value = this.timeRemaining;
+              // Time spent.
+              const timeSpentInputEl = this.querySelector('#' + this.id + '_time_spent');
+              timeSpentInputEl.value = this.timeSpent;
               // items per minute
-              const itemsPerMinuteInputEl = this.elementRef.nativeElement.querySelector('#' + this.id + '_items_per_minute');
+              const itemsPerMinuteInputEl = this.querySelector('#' + this.id + '_items_per_minute');
               itemsPerMinuteInputEl.value = ( lastSelectedNthInputEl.value / ( this.timeSpent / 60 ) );
-              itemsPerMinuteInputEl.dispatchEvent(new Event('change', {bubbles: true}));
               // Items marked is number of checkboxes checked.
-              const itemsNumberOfItemsMarkedInputEl = this.elementRef.nativeElement.querySelector('#' + this.id + '_number_of_items_marked');
+              const itemsNumberOfItemsMarkedInputEl = this.querySelector('#' + this.id + '_number_of_items_marked');
               itemsNumberOfItemsMarkedInputEl.value = this.inputElements.filter((element) => {
                 return element.type === 'checkbox' && element.checked === true;
               }).length;
-              itemsNumberOfItemsMarkedInputEl.dispatchEvent(new Event('change', {bubbles: true}));
-              */
             }
           });
         });
