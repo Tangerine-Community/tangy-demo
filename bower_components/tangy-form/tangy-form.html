@@ -49,7 +49,7 @@
           } 
         }
         this.form.addEventListener('submit', (event) => {
-          if (preparedForSubmit === false) {
+          if (this.preparedForSubmit === false) {
             event.preventDefault()
             for (const element of this.form.elements) {
               const change = new Event('change')
