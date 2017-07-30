@@ -2,9 +2,11 @@
 <html>
 <head>
   <link rel="import" href="bower_components/tangy-timed/tangy-timed.html">
+  <link rel="import" href="bower_components/tangy-form/tangy-form.html">
 </head>
 <body>
-  <form action="http://httpbin.org/get" type="get">
+  <tangy-form id="tangy1">
+  <form action="tangy-timer-example--page-2.html">
     <tangy-timed id="timer1" duration=10>
       <table>
         <tbody>
@@ -55,6 +57,7 @@
     </tangy-timed>
     <input type="submit" value="done">
   </form>
+  </tangy-form>
 
 <script>
   function debug(form, event) {
