@@ -107,7 +107,6 @@
       }
     
       clickedStart() {
-        console.log('yut')
         // Prevent double starts.
         if (this.timeSpent === 0) {
           // @TODO Should disable start timer button to provide visual indication you can't click it again.
@@ -124,15 +123,8 @@
         }
       }
     
-      clickedPause() {
-        // @TODO: Do we need pause/resume?
-      }
-    
       clickedStop() {
         clearInterval(this.timer);
-        // @TODO Last item covered should be a feature you opt into. Not relevant to all things timed.
-        // @TODO Disabling prevent last item from being selected.
-        // this.inputElements.forEach(element => element.disabled = true);
         this.statusMessage = 'Click the last item covered.';
         this.lastSelectedMode = true;
       }
