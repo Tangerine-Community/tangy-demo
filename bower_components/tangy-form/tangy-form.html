@@ -29,25 +29,32 @@
           }
         };
       }
+
       ready() {
         super.ready();
         this.preparedForSubmit = false
         this.form = this.querySelector('form');
+        // Get our session.
         this.session = window.localStorage.getItem(`tangy_form_session_${this.id}`, JSON.stringify(this.session));
-        if (this.session === "undefined") {
+        if (this.session === "undefined" || !this.session) {
           this.session = {}
         } else {
           this.session = JSON.parse(this.session);
         }
+        // Load session into DOM
         for (const element of this.form.elements) {
           if (this.session.hasOwnProperty(element.name)) {
+            const change = new Event('change')
             if (element.type === 'checkbox') {
               element.checked = this.session[element.name]
+              this.form.dispatchEvent(new Event('change'), {bubbles: true})
             } else {
               element.value = this.session[element.name]
+              this.form.dispatchEvent(new Event('change'), {bubbles: true})
             }
           } 
         }
+        // Listen for a submit of the form.
         this.form.addEventListener('submit', (event) => {
           if (this.preparedForSubmit === false) {
             event.preventDefault()
