@@ -34,9 +34,13 @@
       static get is() { return 'tangy-timed'; }
       static get properties() {
         return {
-          timeRemaining: {
+          duration: {
             type: Number,
             value: 60 
+          },
+          timeRemaining: {
+            type: Number,
+            value: 0 
           },
           timeSpent: {
             type: Number,
@@ -56,7 +60,11 @@
     
       ready() {
         super.ready();
+        // Set our countdown to the desired duration.
+        this.timeRemaining = this.duration;
+        // Find all our input elements.
         this.inputElements = this.inputElements = Array.prototype.slice.call(this.querySelectorAll('input'));
+        // Disable all the input elements. Will enable on start.
         this.inputElements.forEach(element => element.disabled = true);
         this.inputElements.forEach(element => {
           element.addEventListener('click', (event) => {
