@@ -115,6 +115,7 @@
           // Get the session from the db.
           this.session = await this.db.get(response.id)
           // Save that as the current session.
+          // @TODO: Add sanitization to user inputs. No malicious code allowed!
           await this.db.put({
             _id: `current_session_info_${this.id}`,
             sessionId: this.session._id 
