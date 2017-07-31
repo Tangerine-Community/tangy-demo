@@ -13,15 +13,15 @@
     <app-header reveals>
       <app-toolbar>
         <paper-icon-button icon="menu" onclick="this.domHost.shadowRoot.querySelector('app-drawer').toggle()"></paper-icon-button>
-        <div main-title>Tangy Form: [[formId]]</div>
+        <div main-title>[[formName]]</div>
         <paper-icon-button on-click="newSession" icon="add"></paper-icon-button>
       </app-toolbar>
     </app-header>
     <app-drawer id="drawer" swipe-open>
       <template is="dom-repeat" items="{{sessions}}">
-        <ol>
-          <li> [[item._id]] </li> <button id="[[item._id]]" on-click="resumeSession">resume</button>
-        </ol>
+        <ul>
+          <li> [[item.datetime]]  <button id="[[item._id]]" on-click="resumeSession">resume</button> </li>
+        </ul>
       </template>
     </app-drawer>
     <style>
@@ -29,7 +29,7 @@
         display: block;
       }
       #content {
-        margin: 0 15px;
+        margin: 0 25px;
       }
     </style>
     <div id="content">
@@ -48,6 +48,7 @@
      */
     class TangyForm extends Polymer.Element {
       static get is() { return 'tangy-form'; }
+      static get formName() { return this.id.replace('-', ' ' )}
       static get properties() {
         return {
           formId: {
@@ -59,9 +60,12 @@
 
       async ready() {
         super.ready();
-        this.formId = this.id
+        this.formName = this.id.replace(/-/g, ' ') 
         this.db = new PouchDB('tangy-form')
         let allDocs = (await this.db.allDocs({include_docs: true})).rows.map((row) => { return row.doc})
+        allDocs.sort(function (a, b) {
+          return b.unixtime - a.unixtime;
+        });
         this.sessions = allDocs.filter((doc) => {
           if (doc.type === 'tangy-form-session' && doc.formId == this.id) return doc
         }) 
@@ -72,7 +76,9 @@
         // Create the new session.
         const response = await this.db.post({
           type: 'tangy-form-session',
-          formId: this.id
+          formId: this.id,
+          datetime: (new Date()).toLocaleString(),
+          unixtime: Date.now()
         })
         // Get the session from the db.
         this.session = await this.db.get(response.id)
@@ -101,7 +107,9 @@
           // Create a new session document.
           const response = await this.db.post({
             type: 'tangy-form-session',
-            formId: this.id
+            formId: this.id,
+            datetime: (new Date()).toLocaleString(),
+            unixtime: Date.now()
           })
           // Get the session from the db.
           this.session = await this.db.get(response.id)
