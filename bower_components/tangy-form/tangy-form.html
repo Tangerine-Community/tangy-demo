@@ -18,6 +18,7 @@
       </app-toolbar>
     </app-header>
     <app-drawer id="drawer" swipe-open>
+      <div on-click='generateCSV'>Download CSV</div>
       <template is="dom-repeat" items="{{sessions}}">
         <ul>
           <li> [[item.datetime]]  <button id="[[item._id]]" on-click="resumeSession">resume</button> </li>
@@ -155,7 +156,34 @@
           }
         })
       }
-       
+
+      generateCSV() {
+        let rows = []
+        for (let session of this.sessions) {
+          let row = []
+          for (let property in session) {
+            row.push('"' + encodeURI(session[property]) + '"')
+          }
+          rows.push(row)
+        }
+        const csvRows = [];
+        let blob = new Blob([], {type: 'application/csv;charset=utf-8;' });
+        for (const row of rows) {
+          blob = new Blob([blob, row.join(',') + '\n'], { type: 'application/csv;charset=utf-8;' });
+        }
+        console.log('creating element');
+        const element = window.document.createElement('a');
+        element.setAttribute('href', URL.createObjectURL(blob));
+        element.setAttribute('download', this.id + '.csv');
+        console.log('appending to DOM');
+        element.style.display = 'none';
+        window.document.body.appendChild(element);
+        console.log('Triggering download.');
+        element.click();
+        console.log('Cleaning up.');
+        window.document.body.removeChild(element);
+      }
+
     }
 
     window.customElements.define(TangyForm.is, TangyForm);
