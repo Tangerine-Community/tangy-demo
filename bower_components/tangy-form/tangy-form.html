@@ -158,17 +158,14 @@
       }
 
       generateCSV() {
-        let rows = []
+        let blob = new Blob([], {type: 'application/csv;charset=utf-8;' });
+        // TODO: Scan for keys. Bonus points for doing it 100 sessions at a time.
         for (let session of this.sessions) {
           let row = []
+          // TODO: Loop through keys, assign empty values for nonmatching keys.
           for (let property in session) {
             row.push('"' + encodeURI(session[property]) + '"')
           }
-          rows.push(row)
-        }
-        const csvRows = [];
-        let blob = new Blob([], {type: 'application/csv;charset=utf-8;' });
-        for (const row of rows) {
           blob = new Blob([blob, row.join(',') + '\n'], { type: 'application/csv;charset=utf-8;' });
         }
         console.log('creating element');
