@@ -4,6 +4,7 @@
 <link rel="import" href="../app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
 <script src="../pouchdb/dist/pouchdb.js"></script>
@@ -13,15 +14,16 @@
     <app-header reveals>
       <app-toolbar>
         <paper-icon-button icon="menu" onclick="this.domHost.shadowRoot.querySelector('app-drawer').toggle()"></paper-icon-button>
-        <div main-title>Tangy Form: [[formId]]</div>
+        <div main-title>[[formName]]</div>
         <paper-icon-button on-click="newSession" icon="add"></paper-icon-button>
       </app-toolbar>
     </app-header>
     <app-drawer id="drawer" swipe-open>
+      <paper-button on-click='generateCSV' raised>Download CSV</paper-button>
       <template is="dom-repeat" items="{{sessions}}">
-        <ol>
-          <li> [[item._id]] </li> <button id="[[item._id]]" on-click="resumeSession">resume</button>
-        </ol>
+        <ul>
+          <li> [[item.datetime]]  <paper-button id="[[item._id]]" on-click="resumeSession" raised>resume</paper-button> </li>
+        </ul>
       </template>
     </app-drawer>
     <style>
@@ -29,7 +31,7 @@
         display: block;
       }
       #content {
-        margin: 0 15px;
+        margin: 0 25px;
       }
     </style>
     <div id="content">
@@ -48,6 +50,7 @@
      */
     class TangyForm extends Polymer.Element {
       static get is() { return 'tangy-form'; }
+      static get formName() { return this.id.replace('-', ' ' )}
       static get properties() {
         return {
           formId: {
@@ -59,9 +62,12 @@
 
       async ready() {
         super.ready();
-        this.formId = this.id
+        this.formName = this.id.replace(/-/g, ' ') 
         this.db = new PouchDB('tangy-form')
         let allDocs = (await this.db.allDocs({include_docs: true})).rows.map((row) => { return row.doc})
+        allDocs.sort(function (a, b) {
+          return b.unixtime - a.unixtime;
+        });
         this.sessions = allDocs.filter((doc) => {
           if (doc.type === 'tangy-form-session' && doc.formId == this.id) return doc
         }) 
@@ -72,7 +78,9 @@
         // Create the new session.
         const response = await this.db.post({
           type: 'tangy-form-session',
-          formId: this.id
+          formId: this.id,
+          datetime: (new Date()).toLocaleString(),
+          unixtime: Date.now()
         })
         // Get the session from the db.
         this.session = await this.db.get(response.id)
@@ -88,7 +96,6 @@
         await this.db.put(this.currentSessionInfo)
         window.location = window.location
       }
-      
 
       async setupForm() { 
         // Get our session.
@@ -101,7 +108,9 @@
           // Create a new session document.
           const response = await this.db.post({
             type: 'tangy-form-session',
-            formId: this.id
+            formId: this.id,
+            datetime: (new Date()).toLocaleString(),
+            unixtime: Date.now()
           })
           // Get the session from the db.
           this.session = await this.db.get(response.id)
@@ -147,7 +156,31 @@
           }
         })
       }
-       
+
+      generateCSV() {
+        let blob = new Blob([], {type: 'application/csv;charset=utf-8;' });
+        // TODO: Scan for keys. Bonus points for doing it 100 sessions at a time.
+        for (let session of this.sessions) {
+          let row = []
+          // TODO: Loop through keys, assign empty values for nonmatching keys.
+          for (let property in session) {
+            row.push('"' + encodeURI(session[property]) + '"')
+          }
+          blob = new Blob([blob, row.join(',') + '\n'], { type: 'application/csv;charset=utf-8;' });
+        }
+        console.log('creating element');
+        const element = window.document.createElement('a');
+        element.setAttribute('href', URL.createObjectURL(blob));
+        element.setAttribute('download', this.id + '.csv');
+        console.log('appending to DOM');
+        element.style.display = 'none';
+        window.document.body.appendChild(element);
+        console.log('Triggering download.');
+        element.click();
+        console.log('Cleaning up.');
+        window.document.body.removeChild(element);
+      }
+
     }
 
     window.customElements.define(TangyForm.is, TangyForm);
