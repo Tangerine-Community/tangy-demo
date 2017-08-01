@@ -4,9 +4,11 @@
   <link rel="import" href="bower_components/tangy-timed/tangy-timed.html">
   <link rel="import" href="bower_components/tangy-form/tangy-form.html">
   <script src="bower_components/pouchdb/dist/pouchdb.js"></script>
+  <script src="bower_components/ckeditor/ckeditor.js"></script>
 </head>
 <body>
   <tangy-form id="fruity-html-form">
+  <div id="editor">
   <form action="page-1.html">
     <tangy-timed id="timer1" duration=10>
       <table>
@@ -58,6 +60,7 @@
     </tangy-timed>
     <input type="submit" value="done">
   </form>
+  </div>
   </tangy-form>
 
 <script>
