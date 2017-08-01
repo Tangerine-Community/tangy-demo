@@ -15,7 +15,9 @@
       <app-toolbar>
         <paper-icon-button icon="menu" onclick="this.domHost.shadowRoot.querySelector('app-drawer').toggle()"></paper-icon-button>
         <div main-title>[[formName]]</div>
-        <paper-icon-button on-click="newSession" icon="add"></paper-icon-button>
+        <paper-icon-button id="newSessionButton" on-click="newSession" icon="add"></paper-icon-button>
+        <paper-icon-button id="viewButton" on-click="view" icon="visibility" disabled></paper-icon-button>
+        <paper-icon-button id="editButton" on-click="edit" icon="create"></paper-icon-button>
       </app-toolbar>
     </app-header>
     <app-drawer id="drawer" swipe-open>
@@ -48,6 +50,7 @@
      * @polymer
      * @demo demo/index.html
      */
+
     class TangyForm extends Polymer.Element {
       static get is() { return 'tangy-form'; }
       static get formName() { return this.id.replace('-', ' ' )}
@@ -59,10 +62,29 @@
           }
         };
       }
+      constructor() {
+        super()
+        this.selfArchive = ''
+        this.state = ''
+        this.commitCounter = 0
+        this.editor = ''
+        
+      }
 
       async ready() {
         super.ready();
+        CKEDITOR.on('instanceReady', (ev) => {
+            this.editor = ev.editor;
+            // you can also add more config for this instance of CKE here
+            // e.g. editor.setReadOnly(false);
+        });
+        // Format the form name for app header.
+        // @TODO This should be done in a getter.
         this.formName = this.id.replace(/-/g, ' ') 
+        // Get all sessions that have the same formId for the sessions list in the sidebar.
+        // TODO: This should be in a tangy-form-session db.
+        // TODO: This should only get a couple of the most recent sessions.
+        // TODO: This should be moved to a tangy-form-sessions component.
         this.db = new PouchDB('tangy-form')
         let allDocs = (await this.db.allDocs({include_docs: true})).rows.map((row) => { return row.doc})
         allDocs.sort(function (a, b) {
@@ -72,6 +94,52 @@
           if (doc.type === 'tangy-form-session' && doc.formId == this.id) return doc
         }) 
         this.setupForm()
+        // If there is a DatArchive API, enable editing, else hide editing UI.
+        if (window.hasOwnProperty('DatArchive')) {
+          this.selfArchive = new DatArchive('' + window.location)
+          // TODO Get everything in the slot. Or the whole doc? Do we need state here or is this for live editing?
+          // state = (document.getElementById('pageContent')).outerHTML
+        } else {
+          debugger
+          this.$.editButton.style.display = 'none';
+          this.$.viewButton.style.display = 'none';
+        }
+      }
+
+      async save() {
+        // Check if state is stale.
+        let saveButton = document.querySelector('#saveButton');
+        saveButton.innerText = 'SAVING...'
+        saveButton.disabled = true
+        let page = (document.getElementById('pageContent')).outerHTML
+        await selfArchive.writeFile('/index.html', templateTop + page + templateBottom, 'utf8')
+        setTimeout(() => {
+          saveButton.innerText = 'SAVE'
+          saveButton.disabled = false 
+        }, 1000)
+      }
+      
+      async publish() {
+        let publishButton = document.querySelector('#publishButton');
+        publishButton.innerText = 'PUBLISHING...'
+        publishButton.disabled = true
+        await selfArchive.commit()
+        publishButton.innerText = 'PUBLISH'
+        publishButton.disabled = false
+      }
+
+      view() {
+        this.$.editButton.disabled = false;
+        this.$.viewButton.disabled = true;
+        (document.querySelector('#editor')).contentEditable = "false"
+        this.editor.destroy();
+      }
+      
+      edit() {
+        this.$.editButton.disabled = true;
+        this.$.viewButton.disabled = false;
+        (document.querySelector('#editor')).contentEditable = "true"
+        CKEDITOR.inline( 'editor' );
       }
 
       async newSession() {
@@ -98,7 +166,7 @@
       }
 
       async setupForm() { 
-        // Get our session.
+        // Get our session, else catch and create a new session.
         this.db = new PouchDB('tangy-form')
         try {
           this.currentSessionInfo = await this.db.get(`current_session_info_${this.id}`);
