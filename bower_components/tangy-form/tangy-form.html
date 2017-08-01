@@ -18,6 +18,7 @@
         <paper-icon-button id="newSessionButton" on-click="newSession" icon="add"></paper-icon-button>
         <paper-icon-button id="viewButton" on-click="view" icon="visibility" disabled></paper-icon-button>
         <paper-icon-button id="editButton" on-click="edit" icon="create"></paper-icon-button>
+        <paper-icon-button id="saveButton" on-click="save" icon="save"></paper-icon-button>
       </app-toolbar>
     </app-header>
     <app-drawer id="drawer" swipe-open>
@@ -68,7 +69,23 @@
         this.state = ''
         this.commitCounter = 0
         this.editor = ''
-        
+        this.templateTop = `
+            <!DOCTYPE html>
+              <html>
+              <head>
+                <link rel="import" href="bower_components/tangy-timed/tangy-timed.html">
+                <link rel="import" href="bower_components/tangy-form/tangy-form.html">
+                <script src="bower_components/pouchdb/dist/pouchdb.js"> <\/script>
+                <script src="bower_components/ckeditor/ckeditor.js"> <\/script>
+              </head>
+              <body>
+                <tangy-form id="fruity-html-form">
+          `;
+        this.templateBottom = `
+              <\/tangy-form>
+            <\/body>
+            <\/html>
+        `;
       }
 
       async ready() {
@@ -108,14 +125,11 @@
 
       async save() {
         // Check if state is stale.
-        let saveButton = document.querySelector('#saveButton');
-        saveButton.innerText = 'SAVING...'
-        saveButton.disabled = true
-        let page = (document.getElementById('pageContent')).outerHTML
-        await selfArchive.writeFile('/index.html', templateTop + page + templateBottom, 'utf8')
+        this.$.saveButton.disabled = true
+        let page = (document.getElementById('editor')).outerHTML
+        await this.selfArchive.writeFile('/index.html', this.templateTop + page + this.templateBottom, 'utf8')
         setTimeout(() => {
-          saveButton.innerText = 'SAVE'
-          saveButton.disabled = false 
+          this.$.saveButton.disabled = false 
         }, 1000)
       }
       
@@ -130,6 +144,7 @@
 
       view() {
         this.$.editButton.disabled = false;
+        this.$.saveButton.disabled = false;
         this.$.viewButton.disabled = true;
         (document.querySelector('#editor')).contentEditable = "false"
         this.editor.destroy();
@@ -137,6 +152,7 @@
       
       edit() {
         this.$.editButton.disabled = true;
+        this.$.saveButton.disabled = true;
         this.$.viewButton.disabled = false;
         (document.querySelector('#editor')).contentEditable = "true"
         CKEDITOR.inline( 'editor' );
