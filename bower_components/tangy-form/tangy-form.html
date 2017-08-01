@@ -23,6 +23,7 @@
     </app-header>
     <app-drawer id="drawer" swipe-open>
       <paper-button on-click='generateCSV' raised>Download CSV</paper-button>
+      <paper-button on-click='newSession' raised>New Session</paper-button>
       <template is="dom-repeat" items="{{sessions}}">
         <ul>
           <li> [[item.datetime]]  <paper-button id="[[item._id]]" on-click="resumeSession" raised>resume</paper-button> </li>
