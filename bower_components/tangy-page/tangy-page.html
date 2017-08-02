@@ -76,7 +76,6 @@
             <body>
               <tangy-page>
                 <div id="editor">
-                  Enter content here...
           `;
         this.templateBottom = `
             <\/div>
@@ -103,7 +102,6 @@
                 <tangy-form id="{{FORM_NAME}}">
                   <div id="editor">
                     <form>
-                      Enter content here...
           `;
         this.formTemplateBottom = `
                  <\/form>
@@ -139,7 +137,9 @@
         this.$.newFormButton.disabled = true
         this.$.editButton.disabled = true
         let fileName = prompt('What should filename name be? Ex. about.html')
-        await this.selfArchive.writeFile(`/${fileName}`, this.templateTop + this.templateBottom, 'utf8')
+        await this.selfArchive.writeFile(`/${fileName}`, this.templateTop + 
+          + 'Enter content here.'
+          + this.templateBottom, 'utf8')
         await this.selfArchive.commit()
         window.location = `${window.location.origin}/${fileName}` 
       }
@@ -152,13 +152,18 @@
         let formName = prompt('What should form name be? Ex. my-tangy-form')
         // @TODO: Create a folder
         await this.selfArchive.mkdir(`/${formName}`)
-        await this.selfArchive.writeFile(`/${formName}/index.html`, this.formTemplateTop.replace('{{FORM_NAME}}', formName) + this.formTemplateBottom, 'utf8')
+        await this.selfArchive.writeFile(`/${formName}/index.html`, this.formTemplateTop.replace('{{FORM_NAME}}', formName) 
+          + 'Enter content here.'
+          + this.formTemplateBottom, 'utf8')
         await this.selfArchive.commit()
         window.location = `${window.location.origin}/${formName}/index.html` 
       }
       async save() {
         this.$.saveButton.disabled = true
-        await this.selfArchive.writeFile(window.location.pathname, this.templateTop + (document.querySelector('#editor')).innerHTML + this.templateBottom, 'utf8')
+        let pathName = window.location.pathname
+        if (pathName == '/') pathName = '/index.html'
+        await this.selfArchive.writeFile(pathName, this.templateTop + (document.querySelector('#editor')).innerHTML + this.templateBottom, 'utf8')
+        await this.selfArchive.commit()
         setTimeout(() => {
           this.$.saveButton.disabled = false 
         }, 1000)
