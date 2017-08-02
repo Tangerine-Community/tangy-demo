@@ -15,20 +15,22 @@
       <app-toolbar>
         <paper-icon-button icon="menu" onclick="this.domHost.shadowRoot.querySelector('app-drawer').toggle()"></paper-icon-button>
         <div main-title>[[formName]]</div>
-        <paper-icon-button id="newPageButton" on-click="newPage" icon="add"></paper-icon-button>
-        <paper-icon-button id="viewButton" on-click="view" icon="visibility" disabled></paper-icon-button>
-        <paper-icon-button id="editButton" on-click="edit" icon="create"></paper-icon-button>
-        <paper-icon-button id="saveButton" on-click="save" icon="save"></paper-icon-button>
+        <paper-icon-button title="new form page" id="newFormPageButton" on-click="newFormPage" icon="add"></paper-icon-button>
+        <paper-icon-button title="turn off editing" id="viewButton" on-click="view" icon="visibility" disabled></paper-icon-button>
+        <paper-icon-button title="edit this form page" id="editButton" on-click="edit" icon="create"></paper-icon-button>
+        <paper-icon-button title="save this form page" id="saveButton" on-click="save" icon="save"></paper-icon-button>
       </app-toolbar>
     </app-header>
-    <app-drawer id="drawer" swipe-open>
-      <paper-button on-click='generateCSV' raised>Download CSV</paper-button>
-      <paper-button on-click='newSession' raised>New Session</paper-button>
-      <template is="dom-repeat" items="{{sessions}}">
-        <ul>
-          <li> [[item.datetime]]  <paper-button id="[[item._id]]" on-click="resumeSession" raised>resume</paper-button> </li>
-        </ul>
-      </template>
+    <app-drawer id="drawer" align="right" swipe-open>
+      <div id="drawer-content">
+        <paper-button on-click='generateCSV' raised>Download CSV</paper-button>
+        <paper-button on-click='newSession' raised>New Session</paper-button>
+        <template is="dom-repeat" items="{{sessions}}">
+          <ul>
+            <li> [[item.datetime]]  <paper-button id="[[item._id]]" on-click="resumeSession" raised>resume</paper-button> </li>
+          </ul>
+        </template>
+      </div>
     </app-drawer>
     <style>
       :host {
@@ -36,6 +38,9 @@
       }
       #content {
         margin: 0 25px;
+      }
+      #drawer-content {
+        padding: 15px;
       }
     </style>
     <div id="content">
@@ -74,15 +79,25 @@
             <!DOCTYPE html>
               <html>
               <head>
-                <link rel="import" href="bower_components/tangy-timed/tangy-timed.html">
-                <link rel="import" href="bower_components/tangy-form/tangy-form.html">
-                <script src="bower_components/pouchdb/dist/pouchdb.js"> <\/script>
-                <script src="bower_components/ckeditor/ckeditor.js"> <\/script>
+                <link rel="import" href="../bower_components/tangy-timed/tangy-timed.html">
+                <link rel="import" href="../bower_components/tangy-form/tangy-form.html">
+                <script src="../bower_components/pouchdb/dist/pouchdb.js"> <\/script>
+                <script src="../bower_components/ckeditor/ckeditor.js"> <\/script>
+                <style>
+                  paper-card {
+                    margin: 15px 0px;
+                    padding: 25px;
+                  }
+                </style>
               </head>
               <body>
                 <tangy-form id="fruity-html-form">
+                  <div id="editor">
+                    <form>
           `;
         this.templateBottom = `
+                  <\/form>
+                <\/div>
               <\/tangy-form>
             <\/body>
             <\/html>
@@ -98,7 +113,9 @@
         });
         // Format the form name for app header.
         // @TODO This should be done in a getter.
+
         this.formName = this.id.replace(/-/g, ' ') 
+        this.folderName = (window.location.pathname.split('\/'))[1]
         // Get all sessions that have the same formId for the sessions list in the sidebar.
         // TODO: This should be in a tangy-form-session db.
         // TODO: This should only get a couple of the most recent sessions.
@@ -124,17 +141,17 @@
         }
       }
 
-      async newPage() {
+      async newFormPage() {
         this.$.saveButton.disabled = true
-        this.$.newPageButton.disabled = true
+        this.$.newFormPageButton.disabled = true
         let page = (document.getElementById('editor')).outerHTML
         let fileName = prompt('What should file name be?')
-        await this.selfArchive.writeFile(`/${fileName}`, this.templateTop + page + this.templateBottom, 'utf8')
-        window.location = `${window.location.origin}/${fileName}` 
-        debugger;
+        await this.selfArchive.writeFile(`/${this.folderName}/${fileName}`, this.templateTop + this.templateBottom, 'utf8')
+        window.location = `${window.location.origin}/${this.folderName}/${fileName}` 
+        await this.selfArchive.commit()
         setTimeout(() => {
           this.$.saveButton.disabled = false 
-          this.$.newPageButton.disabled = false 
+          this.$.newFormPageButton.disabled = false 
         }, 1000)
       }
 
