@@ -94,6 +94,7 @@
                 <tangy-form id="fruity-html-form">
                   <div id="editor">
                     <form>
+                      Enter content here...
           `;
         this.templateBottom = `
                   <\/form>
@@ -145,7 +146,7 @@
         this.$.saveButton.disabled = true
         this.$.newFormPageButton.disabled = true
         let page = (document.getElementById('editor')).outerHTML
-        let fileName = prompt('What should file name be?')
+        let fileName = prompt('What should file name be? Ex. page-2.html')
         await this.selfArchive.writeFile(`/${this.folderName}/${fileName}`, this.templateTop + this.templateBottom, 'utf8')
         window.location = `${window.location.origin}/${this.folderName}/${fileName}` 
         await this.selfArchive.commit()
