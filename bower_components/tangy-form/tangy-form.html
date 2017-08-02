@@ -94,10 +94,8 @@
               <body>
                 <tangy-form id="{{FORM_NAME}}">
                   <div id="editor">
-                    <form>
           `;
         this.formTemplateBottom = `
-                  <\/form>
                 <\/div>
               <\/tangy-form>
             <\/body>
@@ -148,15 +146,21 @@
         let page = (document.getElementById('editor')).outerHTML
         let formName = (window.location.pathname).split('\/')[1]
         let fileName = prompt('What should file name be? Ex. page-2.html')
-        await this.selfArchive.writeFile(`/${this.folderName}/${fileName}`, this.formTemplateTop.replace('{{FORM_NAME}}', formName) 
-          + 'Enter content here.'
-          + this.formTemplateBottom, 'utf8')
-        window.location = `${window.location.origin}/${this.folderName}/${fileName}` 
-        await this.selfArchive.commit()
-        setTimeout(() => {
+        if (fileName) {
+          await this.selfArchive.writeFile(`/${this.folderName}/${fileName}`, this.formTemplateTop.replace('{{FORM_NAME}}', formName) 
+            + `<form>
+              Enter content here.<br>
+              <br>
+              <br>
+              <input type="submit" value="submit">
+              </form>`
+            + this.formTemplateBottom, 'utf8')
+          await this.selfArchive.commit()
+          window.location = `${window.location.origin}/${this.folderName}/${fileName}` 
+        } else {
           this.$.saveButton.disabled = false 
           this.$.newFormPageButton.disabled = false 
-        }, 1000)
+        }
       }
 
       async save() {
@@ -166,6 +170,7 @@
         let pathName = window.location.pathname
         if (pathName == `/${formName}/`) pathName = `/${formName}/index.html`
         await this.selfArchive.writeFile(pathName, this.formTemplateTop.replace('{{FORM_NAME}}', formName) + page + this.formTemplateBottom, 'utf8')
+        await this.selfArchive.commit()
         setTimeout(() => {
           this.$.saveButton.disabled = false 
         }, 1000)
