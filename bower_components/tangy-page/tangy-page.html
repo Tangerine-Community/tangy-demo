@@ -100,7 +100,7 @@
                 </style>
               </head>
               <body>
-                <tangy-form id="fruity-html-form">
+                <tangy-form id="{{FORM_NAME}}">
                   <div id="editor">
                     <form>
                       Enter content here...
@@ -152,7 +152,7 @@
         let formName = prompt('What should form name be? Ex. my-tangy-form')
         // @TODO: Create a folder
         await this.selfArchive.mkdir(`/${formName}`)
-        await this.selfArchive.writeFile(`/${formName}/index.html`, this.formTemplateTop + this.formTemplateBottom, 'utf8')
+        await this.selfArchive.writeFile(`/${formName}/index.html`, this.formTemplateTop.replace('{{FORM_NAME}}', formName) + this.formTemplateBottom, 'utf8')
         await this.selfArchive.commit()
         window.location = `${window.location.origin}/${formName}/index.html` 
       }
