@@ -6,8 +6,10 @@
   <script src="bower_components/pouchdb/dist/pouchdb.js"></script>
   <script> function 
     debug(form) {
-    console.log(form.elements.formly_1_select_country.value)
-      if (form.elements.formly_1_select_country.value == 'AU') form.elements.formly_1_select_city_2.hidden = false 
+    console.log(form.elements.s4.value.value)
+      if (form.elements.oral_read_last_selected_nth.valueAsNumber >= 8) form.elements.read_comp8_div.hidden = false; else  form.elements.read_comp8_div.hidden = true 
+      if (form.elements.oral_read_last_selected_nth.valueAsNumber >= 14) form.elements.read_comp14_div.hidden = false; else  form.elements.read_comp14_div.hidden = true 
+      if (form.elements.s4.value != 1) form.elements.s5_div.hidden = false; else  form.elements.s5_div.hidden = true 
       debugger
     }
     </script>
@@ -15,7 +17,16 @@
 <body>
   <tangy-form id="egra-html-form" style="margin-left: 200px;">
     <form action="page-3.html" onchange="
-    //debug(this)
+    //debugger
+    console.log(this.children.s5_div.hidden + ':' + this.elements.s4.value )
+      if (this.elements.oral_read_last_selected_nth.value >= 8) this.children.read_comp8_div.hidden = false 
+      if (this.elements.oral_read_last_selected_nth.value >= 14) this.children.read_comp14_div.hidden = false 
+      if (this.elements.s4.value == 1) if (this.elements.s4.value != '') {this.children.s5_div.hidden = false} 
+      if (this.elements.s4.value != 1) if (this.elements.s4.value != '') {this.children.s5_div.hidden = true} 
+      if (this.elements.s11.value == 1) if (this.elements.s11.value != '') {this.children.s12_div.hidden = false} 
+      if (this.elements.s11.value != 1) if (this.elements.s11.value != '') {this.children.s12_div.hidden = true} 
+      this.elements.s4.value = 999
+      this.elements.s11.value = 999
     ">
         <paper-card>
             Please select country
@@ -452,19 +463,23 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
 <h3>Subtask 5B: Reading Comprehension</h3>
 <p><strong>Now I am going to ask you a few questions about the story you just read. Try to answer the questions as well as you can. You can provide your answers in whichever language you prefer.&nbsp;&nbsp;</strong></p>
         
-        <paper-card>
+    <div id="read_comp_div" name="read_comp_div" hidden>
+         <paper-card >
             1.	What do Binta and Ali do every day at school?<br/>
             <input type="radio" id="read_comp1_1" name="read_comp1" value="1" >Correct<br/>
             <input type="radio" id="read_comp1_2" name="read_comp1" value="0">Incorrect<br/>
             <input type="radio" id="read_comp1_3" name="read_comp1" value="3">No Response<br/>
         </paper-card>
+    </div>
         <br/>
+    <div id="read_comp8_div" name="read_comp8_div" hidden>
          <paper-card>
             2.	What is Binta’s duty at school?<br/>
             <input type="radio" id="read_comp2_1" name="read_comp2" value="1" >Correct<br/>
             <input type="radio" id="read_comp2_2" name="read_comp2" value="0">Incorrect<br/>
             <input type="radio" id="read_comp2_3" name="read_comp2" value="3">No Response<br/>
         </paper-card>
+    </div id="read_comp14_div" name="read_comp14_div" hidden>
         <br/>
          <paper-card>
             3.	Where did Ali and Binta look for the broom?<br/>
@@ -555,6 +570,7 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
             <input type="radio" id="s4_3" name="s4" value="3">Do not know/No response<br/>
         </paper-card>
         <br/>
+    <div id="s5_div" hidden>     
         <paper-card>
             Please tell me the type of school you attend. </br>
             <input type="radio" id="s5_1" name="s5" value="1" >Public/government school<br/>
@@ -562,6 +578,7 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
             <input type="radio" id="s5_3" name="s5" value="3">Other<br/>
             <input type="radio" id="s5_4" name="s5" value="4">Do not know/No response<br/>
         </paper-card>
+    </div>
         <br/>
         <paper-card>
             Were you absent from THIS school any day last week?</br>
@@ -606,6 +623,7 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
             <input type="radio" id="s11_3" name="s11" value="3">Do not know/No response<br/>
         </paper-card>
         </br>
+    <div id="s12_div" hidden> 
         <paper-card>
            Who helps you with your homework?</br>
             <input type="radio" id="s12_1" name="s12" value="1">Brother or sister<br/>
@@ -614,6 +632,7 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
             <input type="radio" id="s12_4" name="s12" value="4">Other<br/>
             <input type="radio" id="s12_5" name="s12" value="5">Do not know/No response<br/>
         </paper-card>
+    </div>
         <br/>
         <paper-card>
            How often do you read out loud to someone at home? Never, sometimes, or every day?</br>
