@@ -101,10 +101,8 @@
               <body>
                 <tangy-form id="{{FORM_NAME}}">
                   <div id="editor">
-                    <form>
           `;
         this.formTemplateBottom = `
-                 <\/form>
                 <\/div>
               <\/tangy-form>
             <\/body>
@@ -153,7 +151,12 @@
         // @TODO: Create a folder
         await this.selfArchive.mkdir(`/${formName}`)
         await this.selfArchive.writeFile(`/${formName}/index.html`, this.formTemplateTop.replace('{{FORM_NAME}}', formName) 
-          + 'Enter content here.'
+          + `<form>
+              Enter content here.<br>
+              <br>
+              <br>
+              <input type="submit" value="submit">
+            </form>`
           + this.formTemplateBottom, 'utf8')
         await this.selfArchive.commit()
         window.location = `${window.location.origin}/${formName}/index.html` 
