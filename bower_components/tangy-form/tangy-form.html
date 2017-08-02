@@ -14,6 +14,7 @@
     <app-header reveals>
       <app-toolbar>
         <paper-icon-button icon="menu" onclick="this.domHost.shadowRoot.querySelector('app-drawer').toggle()"></paper-icon-button>
+        <paper-icon-button icon="home" onclick="window.location = '/'"></paper-icon-button>
         <div main-title>[[formName]]</div>
         <paper-icon-button title="new form page" id="newFormPageButton" on-click="newFormPage" icon="add"></paper-icon-button>
         <paper-icon-button title="turn off editing" id="viewButton" on-click="view" icon="visibility" disabled></paper-icon-button>
@@ -75,7 +76,7 @@
         this.state = ''
         this.commitCounter = 0
         this.editor = ''
-        this.templateTop = `
+        this.formTemplateTop = `
             <!DOCTYPE html>
               <html>
               <head>
@@ -91,12 +92,11 @@
                 </style>
               </head>
               <body>
-                <tangy-form id="fruity-html-form">
+                <tangy-form id="{{FORM_NAME}}">
                   <div id="editor">
                     <form>
-                      Enter content here...
           `;
-        this.templateBottom = `
+        this.formTemplateBottom = `
                   <\/form>
                 <\/div>
               <\/tangy-form>
@@ -146,8 +146,11 @@
         this.$.saveButton.disabled = true
         this.$.newFormPageButton.disabled = true
         let page = (document.getElementById('editor')).outerHTML
+        let formName = (window.location.pathname).split('\/')[1]
         let fileName = prompt('What should file name be? Ex. page-2.html')
-        await this.selfArchive.writeFile(`/${this.folderName}/${fileName}`, this.templateTop + this.templateBottom, 'utf8')
+        await this.selfArchive.writeFile(`/${this.folderName}/${fileName}`, this.formTemplateTop.replace('{{FORM_NAME}}', formName) 
+          + 'Enter content here.'
+          + this.formTemplateBottom, 'utf8')
         window.location = `${window.location.origin}/${this.folderName}/${fileName}` 
         await this.selfArchive.commit()
         setTimeout(() => {
@@ -159,7 +162,8 @@
       async save() {
         this.$.saveButton.disabled = true
         let page = (document.getElementById('editor')).outerHTML
-        await this.selfArchive.writeFile(window.location.pathname, this.templateTop + page + this.templateBottom, 'utf8')
+        let formName = (window.location.pathname).split('\/')[1]
+        await this.selfArchive.writeFile(window.location.pathname, this.formTemplateTop.replace('{{FORM_NAME}}', formName) + page + this.formTemplateBottom, 'utf8')
         setTimeout(() => {
           this.$.saveButton.disabled = false 
         }, 1000)
