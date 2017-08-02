@@ -161,9 +161,11 @@
 
       async save() {
         this.$.saveButton.disabled = true
-        let page = (document.getElementById('editor')).outerHTML
+        let page = (document.getElementById('editor')).innerHTML
         let formName = (window.location.pathname).split('\/')[1]
-        await this.selfArchive.writeFile(window.location.pathname, this.formTemplateTop.replace('{{FORM_NAME}}', formName) + page + this.formTemplateBottom, 'utf8')
+        let pathName = window.location.pathname
+        if (pathName == `/${formName}/`) pathName = `/${formName}/index.html`
+        await this.selfArchive.writeFile(pathName, this.formTemplateTop.replace('{{FORM_NAME}}', formName) + page + this.formTemplateBottom, 'utf8')
         setTimeout(() => {
           this.$.saveButton.disabled = false 
         }, 1000)
