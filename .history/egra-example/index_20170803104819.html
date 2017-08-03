@@ -6,46 +6,6 @@
     <link rel="import" href="../bower_components/tangy-form/tangy-form.html">
     <script src="../bower_components/pouchdb/dist/pouchdb.js"> </script>
     <script src="../bower_components/ckeditor/ckeditor.js"> </script>
-    <script> 
-        var checked = []; 
-        function getChecked(varName) {
-            checked = []
-            var ele = document.getElementsByName(varName);
-            for(var i=0; ele[i]; ++i){
-                if(ele[i].checked){
-                    checked.push(ele[i].value)
-                }
-            }
-        }
-    </script>
-    <script> 
-        function debug (form) {
-            debugger;
-            console.log(form.children.s35_div.hidden + ':' + checked.indexOf("4") )
-      if (form.elements.oral_read_last_selected_nth.value >= 8) form.children.read_comp8_div.hidden = false 
-      if (form.elements.oral_read_last_selected_nth.value >= 14) form.children.read_comp14_div.hidden = false 
-      if (form.elements.oral_read_last_selected_nth.value >= 20) form.children.read_comp20_div1.hidden = false 
-      if (form.elements.oral_read_last_selected_nth.value >= 20) form.children.read_comp20_div2.hidden = false 
-      if (form.elements.oral_read_last_selected_nth.value >= 20) form.children.read_comp20_div3.hidden = false 
-      if (form.elements.s4.value == 1) if (form.elements.s4.value != '') {form.children.s5_div.hidden = false} 
-      if (form.elements.s4.value != 1) if (form.elements.s4.value != '') {form.children.s5_div.hidden = true} 
-      if (form.elements.s11.value == 1) if (form.elements.s11.value != '') {form.children.s12_div.hidden = false} 
-      if (form.elements.s11.value != 1) if (form.elements.s11.value != '') {form.children.s12_div.hidden = true} 
-      getChecked('s34')
-
-      if (checked.indexOf("4") != -1) form.children.s35_div.hidden = false; else form.children.s35_div.hidden = true
-      
-      var label = form.elements.s40.labels[0].innerText
-      if (form.elements.s39.value != "") form.elements.s40.labels[0].innerText = label.replace ("@",form.elements.s39.value)
-      //if (non_word_number_of_items_marked >= 25) 
-      
-      //fire event that it has changed
-      var event =new Event("change")
-      //form.elements.s4.value = 999
-      //form.elements.s4.dispatchEvent(event)
-      form.elements.s11.value = 999
-        } 
-    </script>
     <style>
       paper-card {
         margin: 15px 0px;
@@ -57,8 +17,16 @@
   <tangy-form id="egra-html-form">
     <div id="editor">
     <form action="" onchange="
-    debug(this)
-    
+    debugger
+    console.log(this.children.s5_div.hidden + ':' + this.elements.s4.value )
+      if (this.elements.oral_read_last_selected_nth.value >= 8) this.children.read_comp8_div.hidden = false 
+      if (this.elements.oral_read_last_selected_nth.value >= 14) this.children.read_comp14_div.hidden = false 
+      if (this.elements.s4.value == 1) if (this.elements.s4.value != '') {this.children.s5_div.hidden = false} 
+      if (this.elements.s4.value != 1) if (this.elements.s4.value != '') {this.children.s5_div.hidden = true} 
+      if (this.elements.s11.value == 1) if (this.elements.s11.value != '') {this.children.s12_div.hidden = false} 
+      if (this.elements.s11.value != 1) if (this.elements.s11.value != '') {this.children.s12_div.hidden = true} 
+      this.elements.s4.value = 999
+      this.elements.s11.value = 999
     ">
         <paper-card>
             Please select country
@@ -110,7 +78,7 @@
 <br/>
         <paper-card>
              2. What is the child's year of birth? </br>
-            <input type="text" id="formly_2_year_birth" name="birth_year" pattern="[2][0][0|1][0-9]|[1][9][9|8][0-9]|(999)" title="1990-2019 or enter 999 for no reply"> 
+            <input type="text" id="formly_2_year_birth" name="birth_year" > 
         </paper-card>
 <br/>
         <paper-card>
@@ -524,7 +492,7 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
 <h3>Subtask 5B: Reading Comprehension</h3>
 <p><strong>Now I am going to ask you a few questions about the story you just read. Try to answer the questions as well as you can. You can provide your answers in whichever language you prefer.&nbsp;&nbsp;</strong></p>
         
-    <div id="read_comp8_div" name="read_comp8_div" hidden>
+    <div id="read_comp_div" name="read_comp_div" hidden>
          <paper-card >
             1.	What do Binta and Ali do every day at school?<br/>
             <input type="radio" id="read_comp1_1" name="read_comp1" value="1" >Correct<br/>
@@ -533,15 +501,14 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
         </paper-card>
     </div>
         <br/>
-    <div id="read_comp14_div" name="read_comp14_div" hidden>
+    <div id="read_comp8_div" name="read_comp8_div" hidden>
          <paper-card>
             2.	What is Binta’s duty at school?<br/>
             <input type="radio" id="read_comp2_1" name="read_comp2" value="1" >Correct<br/>
             <input type="radio" id="read_comp2_2" name="read_comp2" value="0">Incorrect<br/>
             <input type="radio" id="read_comp2_3" name="read_comp2" value="3">No Response<br/>
         </paper-card>
-    </div>
-    <div id="read_comp20_div1" name="read_comp20_div1" hidden>
+    </div id="read_comp14_div" name="read_comp14_div" hidden>
         <br/>
          <paper-card>
             3.	Where did Ali and Binta look for the broom?<br/>
@@ -549,25 +516,20 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
             <input type="radio" id="read_comp3_2" name="read_comp3" value="0">Incorrect<br/>
             <input type="radio" id="read_comp3_3" name="read_comp3" value="3">No Response<br/>
         </paper-card>
-    </div>
         <br/>
-    <div id="read_comp20_div2" name="read_comp20_div2" hidden>
          <paper-card>
             4.	Where was the broom?<br/>
             <input type="radio" id="read_comp4_1" name="read_comp4" value="1" >Correct<br/>
             <input type="radio" id="read_comp4_2" name="read_comp4" value="0">Incorrect<br/>
             <input type="radio" id="read_comp4_3" name="read_comp4" value="3">No Response<br/>
         </paper-card>
-    </div>
         <br/>
-    <div id="read_comp20_div3" name="read_comp20_div3" hidden>
          <paper-card>
             5.	What did the teacher give Ali and Binta?<br/>
             <input type="radio" id="read_comp5_1" name="read_comp5" value="1" >Correct<br/>
             <input type="radio" id="read_comp5_2" name="read_comp5" value="0">Incorrect<br/>
             <input type="radio" id="read_comp5_3" name="read_comp5" value="3">No Response<br/>
         </paper-card>
-    </div>
         <br/>
 
 
@@ -728,7 +690,7 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
 
 <h3>Pupil Questionnaire - Part 2</h3> </br>
         <paper-card>
-           What is the main flooring material of your house? </br>
+           Now I’m going to ask you a few questions about your home. What language do you speak most frequently at home?</br>
             <input type="radio" id="s16_1" name="s16" value="1">Earth/sand<br/>
             <input type="radio" id="s16_2" name="s16" value="2">Straw<br/>
             <input type="radio" id="s16_3" name="s16" value="3">Cement<br/>
@@ -868,57 +830,13 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
         </paper-card>
         <br/>
 
-<h3>OTHER EXAMPLES</h3> </br>
-        <paper-card>
-           Multi select controling other fields</br>
-            <input type="checkbox" id="s34_1" name="s34" value="1">Languages 1<br/>
-            <input type="checkbox" id="s34_2" name="s34" value="2">Languages 2<br/>
-            <input type="checkbox" id="s34_3" name="s34" value="3">Languages 3<br/>
-            <input type="checkbox" id="s34_4" name="s34" value="4">Languages 4<br/>
-            <input type="checkbox" id="s34_5" name="s34" value="5">Languages 5<br/>
-            <input type="checkbox" id="s34_6" name="s34" value="6">Languages 6<br/>
-        </paper-card>
-        <br/>
-    <div id="s35_div" hidden>     
-        <paper-card>
-           Only visible when Language 4 is in results</br>
-            <input type="radio" id="s35_1" name="s35" value="1" >Yes<br/>
-            <input type="radio" id="s35_2" name="s35" value="0">No<br/>
-            <input type="radio" id="s35_3" name="s35" value="3">Do not know/No response<br/>
-        </paper-card>
-    </div>
-    <br/>
-    <div id="s36_div" >     
-        <paper-card>
-           Number from 1 to 40</br>
-            <input type="text" id="s36" name="s36" pattern="([0-9]|[1-3][0-9])" title="Number must be less then 40"><br/>
-        </paper-card>
-    </div>
-    <br/>
-    <div id="s38_div" >     
-        <paper-card>
-            Number between 5 and 10 or 999 when no answer </br>
-            <input type="text" id="s38" name="s38" pattern="([5-9]|10|999)" title="Number must be between 5 and 10"><br/>
-        </paper-card>
-    </div>
-    <div id="s39_div" >     
-        <paper-card>
-            Text used in a future question prompt</br>
-            <input type="text" id="s39" name="s39"><br/>
-        </paper-card>
-    </div>
-         <paper-card>
-             <label id="s40_label" name="s40_label" for="s40">How old are you @?</label></br>
-            <input type="text" id="s40" name="s40"><br/>
-        </paper-card>
-        <br/>
-    <div id="s41_div" hidden>     
-        <paper-card>
-            Skip this if the number of wrong items on the non word grid is > 25</br>
-            <input type="text" id="s41" name="s41"><br/>
-        </paper-card>
-    </div>
-    </br>
+        <fieldset id="send_me_fruit_prompt" hidden>
+            <input name="send_me_fruit" type="checkbox" id="send_me_fruit">
+            <label for="send_me_fruit">Would you like us to send you some of the fruit you've never seen?</label>
+        </fieldset>
+        <div id="offer_fruit" hidden>
+            <img width=300 id="offer_fruit" src="assets/fruit-bowl.gif"> <br>
+        </div>
         <input type="submit" value="done">
     </form>
     </div>
