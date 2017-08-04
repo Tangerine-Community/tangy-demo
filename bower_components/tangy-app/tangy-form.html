@@ -1,0 +1,192 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../app-layout/app-header/app-header.html">
+<link rel="import" href="../app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
+<link rel="import" href="../../node_modules/csv-file-creator/index.js">
+<script src="../pouchdb/dist/pouchdb.js"></script>
+
+<dom-module id="tangy-form">
+  <template>
+    <app-header reveals>
+      <app-toolbar>
+        <paper-icon-button icon="menu" onclick="this.domHost.shadowRoot.querySelector('app-drawer').toggle()"></paper-icon-button>
+        <div main-title>[[formName]]</div>
+        <paper-icon-button on-click="newSession" icon="add"></paper-icon-button>
+      </app-toolbar>
+    </app-header>
+    <app-drawer id="drawer" swipe-open>
+      <paper-button on-click='generateCSV' raised>Download CSV</paper-button>
+      <template is="dom-repeat" items="{{sessions}}">
+        <ul>
+          <li> [[item.datetime]]  <paper-button id="[[item._id]]" on-click="resumeSession" raised>resume</paper-button> </li>
+        </ul>
+      </template>
+    </app-drawer>
+    <style>
+      :host {
+        display: block;
+      }
+      #content {
+        margin: 0 25px;
+      }
+    </style>
+    <div id="content">
+      <slot></slot>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * `tangy-form`
+     * An element used to encapsulate form elements for multipage forms with a session in localStorage
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+
+    class TangyForm extends Polymer.Element {
+      static get is() { return 'tangy-form'; }
+      static get formName() { return this.id.replace('-', ' ' )}
+      static get properties() {
+        return {
+          formId: {
+            type: String,
+            value: 'tangy-form'
+          }
+        };
+      }
+
+      async ready() {
+        super.ready();
+        debugger;
+        this.formName = this.id.replace(/-/g, ' ') 
+        this.db = new PouchDB('tangy-form')
+        let allDocs = (await this.db.allDocs({include_docs: true})).rows.map((row) => { return row.doc})
+        allDocs.sort(function (a, b) {
+          return b.unixtime - a.unixtime;
+        });
+        this.sessions = allDocs.filter((doc) => {
+          if (doc.type === 'tangy-form-session' && doc.formId == this.id) return doc
+        }) 
+        this.setupForm()
+      }
+
+      async newSession() {
+        // Create the new session.
+        const response = await this.db.post({
+          type: 'tangy-form-session',
+          formId: this.id,
+          datetime: (new Date()).toLocaleString(),
+          unixtime: Date.now()
+        })
+        // Get the session from the db.
+        this.session = await this.db.get(response.id)
+        // Save that as the current session.
+        this.currentSessionInfo.sessionId = this.session._id
+        await this.db.put(this.currentSessionInfo)
+        this.currentSessionInfo = this.db.get(this.currentSessionInfo._id)
+        window.location = window.location
+      }
+
+      async resumeSession(event) {
+        this.currentSessionInfo.sessionId = event.currentTarget.id
+        await this.db.put(this.currentSessionInfo)
+        window.location = window.location
+      }
+
+      async setupForm() { 
+        // Get our session.
+        this.db = new PouchDB('tangy-form')
+        try {
+          this.currentSessionInfo = await this.db.get(`current_session_info_${this.id}`);
+          this.session = await this.db.get(this.currentSessionInfo.sessionId)
+        }
+        catch(e) {
+          // Create a new session document.
+          const response = await this.db.post({
+            type: 'tangy-form-session',
+            formId: this.id,
+            datetime: (new Date()).toLocaleString(),
+            unixtime: Date.now()
+          })
+          // Get the session from the db.
+          this.session = await this.db.get(response.id)
+          // Save that as the current session.
+          // @TODO: Add sanitization to user inputs. No malicious code allowed!
+          await this.db.put({
+            _id: `current_session_info_${this.id}`,
+            sessionId: this.session._id 
+          })
+          this.currentSessionInfo = await this.db.get(`current_session_info_${this.id}`)
+        }
+        // Load session into DOM
+        this.form = this.querySelector('form');
+        for (const element of this.form.elements) {
+          if (this.session.hasOwnProperty(element.name)) {
+            const change = new Event('change')
+            if (element.type === 'checkbox') {
+              element.checked = this.session[element.name]
+              this.form.dispatchEvent(new Event('change'), {bubbles: true})
+            } else {
+              element.value = this.session[element.name]
+              this.form.dispatchEvent(new Event('change'), {bubbles: true})
+            }
+          } 
+        }
+        // Listen for a submit of the form.
+        this.preparedForSubmit = false
+        this.form.addEventListener('submit', async (event) => {
+          if (this.preparedForSubmit === false) {
+            event.preventDefault()
+            for (const element of this.form.elements) {
+              const change = new Event('change')
+              if (element.type === 'checkbox') {
+                this.session[element.name] = element.checked
+                element.dispatchEvent(change, {bubbles: true})
+              } else {
+                this.session[element.name] = element.value
+                element.dispatchEvent(change, {bubbles: true})
+              }
+            }
+            await this.db.put(this.session);
+            this.preparedForSubmit = true
+            this.form.submit()
+          }
+        })
+      }
+
+      generateCSV() {
+        let blob = new Blob([], {type: 'application/csv;charset=utf-8;' });
+        // TODO: Scan for keys. Bonus points for doing it 100 sessions at a time.
+        for (let session of this.sessions) {
+          let row = []
+          // TODO: Loop through keys, assign empty values for nonmatching keys.
+          for (let property in session) {
+            row.push('"' + encodeURI(session[property]) + '"')
+          }
+          blob = new Blob([blob, row.join(',') + '\n'], { type: 'application/csv;charset=utf-8;' });
+        }
+        console.log('creating element');
+        const element = window.document.createElement('a');
+        element.setAttribute('href', URL.createObjectURL(blob));
+        element.setAttribute('download', this.id + '.csv');
+        console.log('appending to DOM');
+        element.style.display = 'none';
+        window.document.body.appendChild(element);
+        console.log('Triggering download.');
+        element.click();
+        console.log('Cleaning up.');
+        window.document.body.removeChild(element);
+      }
+
+    }
+
+    window.customElements.define(TangyForm.is, TangyForm);
+  </script>
+</dom-module>

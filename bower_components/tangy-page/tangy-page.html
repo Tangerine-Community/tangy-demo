@@ -13,6 +13,7 @@
   <template>
     <app-header reveals>
       <app-toolbar>
+        <paper-icon-button title="settings" id="settinsButton" on-click="openSettings" icon="settings"></paper-icon-button>
         <paper-icon-button icon="home" onclick="window.location = '/'"></paper-icon-button>
         <div main-title></div>
         <paper-icon-button title="add a new page" id="newPageButton" on-click="newPage" icon="add"></paper-icon-button>
@@ -23,6 +24,11 @@
       </app-toolbar>
     </app-header>
     <style>
+      #settings_iframe {
+        border: 0px;
+        width: 100%;
+        height: 700px;
+      }
       :host {
         display: block;
       }
@@ -30,6 +36,7 @@
         margin: 0 25px;
       }
     </style>
+    <iframe src="/tangerine/index.html" id="settings_iframe" width="100%" hidden></iframe>
     <div id="content">
       <slot></slot>
     </div>
@@ -127,6 +134,10 @@
           this.$.editButton.style.display = 'none';
           this.$.viewButton.style.display = 'none';
         }
+      }
+
+      async openSettings() {
+          this.$.settings_iframe.hidden = !this.$.settings_iframe.hidden
       }
 
       async newPage() {

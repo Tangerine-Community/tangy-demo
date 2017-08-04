@@ -1,0 +1,35 @@
+
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Tangerine v3</title>
+  <meta name="description" content="Tangerine v3">
+  <meta name="author" content="Tangerine">
+</head>
+
+<body>
+<h1>Choose Language:</h1>
+    <ul id="languages">
+    <li><a href="/tangerine/en" onclick="setLocale('en')">en-US</a></li><li><a href="/tangerine/es" onclick="setLocale('es')">es-SP</a></li><li><a href="/tangerine/fr" onclick="setLocale('fr')">fr-FR</a></li>
+    </ul>
+  <script>
+  document.onreadystatechange = () => {
+        if (document.readyState === 'interactive') {
+            navigateToLocale()
+        }
+    }
+     function navigateToLocale() {
+        let locale = localStorage.getItem("tangy-locale");
+        if(locale){
+            window.location.href = locale;
+        } 
+    }
+       function setLocale(locale) {
+        localStorage.setItem("tangy-locale", locale);
+    }
+  </script>
+</body>
+</html>
