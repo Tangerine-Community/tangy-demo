@@ -7,9 +7,9 @@
     <script src="../bower_components/pouchdb/dist/pouchdb.js"> </script>
     <script src="../bower_components/ckeditor/ckeditor.js"> </script>
     <script> 
+        var s40 = form.elements.s40.labels[0].innerText;
         var checked = []; 
         function getChecked(varName) {
-            checked = []
             var ele = document.getElementsByName(varName);
             for(var i=0; ele[i]; ++i){
                 if(ele[i].checked){
@@ -32,17 +32,9 @@
       if (form.elements.s11.value == 1) if (form.elements.s11.value != '') {form.children.s12_div.hidden = false} 
       if (form.elements.s11.value != 1) if (form.elements.s11.value != '') {form.children.s12_div.hidden = true} 
       getChecked('s34')
-
       if (checked.indexOf("4") != -1) form.children.s35_div.hidden = false; else form.children.s35_div.hidden = true
-      
-      var label = form.elements.s40.labels[0].innerText
-      if (form.elements.s39.value != "") form.elements.s40.labels[0].innerText = label.replace ("@",form.elements.s39.value)
-      //if (non_word_number_of_items_marked >= 25) 
-      
-      //fire event that it has changed
-      var event =new Event("change")
-      //form.elements.s4.value = 999
-      //form.elements.s4.dispatchEvent(event)
+      if (form.elements.s39.value != "") form.elements.s40.labels[0].innerText =  s40 + form.elements.s39.value + "?"
+      form.elements.s4.value = 999
       form.elements.s11.value = 999
         } 
     </script>
@@ -891,7 +883,7 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
     <div id="s36_div" >     
         <paper-card>
            Number from 1 to 40</br>
-            <input type="text" id="s36" name="s36" pattern="([0-9]|[1-3][0-9])" title="Number must be less then 40"><br/>
+            <input type="text" id="s36" name="s36" pattern="(([0-9]|[1-3][0-9]))" title="Number must be less then 40"><br/>
         </paper-card>
     </div>
     <br/>
@@ -908,17 +900,10 @@ Adama has a hen. It lays eggs every day. Adama sells the eggs at the market. One
         </paper-card>
     </div>
          <paper-card>
-             <label id="s40_label" name="s40_label" for="s40">How old are you @?</label></br>
+             <label id="s40_label" name="s40_label" for="s40">How old are you </label></br>
             <input type="text" id="s40" name="s40"><br/>
         </paper-card>
         <br/>
-    <div id="s41_div" hidden>     
-        <paper-card>
-            Skip this if the number of wrong items on the non word grid is > 25</br>
-            <input type="text" id="s41" name="s41"><br/>
-        </paper-card>
-    </div>
-    </br>
         <input type="submit" value="done">
     </form>
     </div>

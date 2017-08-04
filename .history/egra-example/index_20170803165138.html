@@ -9,7 +9,6 @@
     <script> 
         var checked = []; 
         function getChecked(varName) {
-            checked = []
             var ele = document.getElementsByName(varName);
             for(var i=0; ele[i]; ++i){
                 if(ele[i].checked){
@@ -32,9 +31,7 @@
       if (form.elements.s11.value == 1) if (form.elements.s11.value != '') {form.children.s12_div.hidden = false} 
       if (form.elements.s11.value != 1) if (form.elements.s11.value != '') {form.children.s12_div.hidden = true} 
       getChecked('s34')
-
       if (checked.indexOf("4") != -1) form.children.s35_div.hidden = false; else form.children.s35_div.hidden = true
-      
       var label = form.elements.s40.labels[0].innerText
       if (form.elements.s39.value != "") form.elements.s40.labels[0].innerText = label.replace ("@",form.elements.s39.value)
       //if (non_word_number_of_items_marked >= 25) 

@@ -9,13 +9,15 @@
     <script> 
         var checked = []; 
         function getChecked(varName) {
-            checked = []
             var ele = document.getElementsByName(varName);
             for(var i=0; ele[i]; ++i){
                 if(ele[i].checked){
                     checked.push(ele[i].value)
                 }
             }
+        }
+        function clearChecked (){
+            checked = []
         }
     </script>
     <script> 
@@ -34,6 +36,7 @@
       getChecked('s34')
 
       if (checked.indexOf("4") != -1) form.children.s35_div.hidden = false; else form.children.s35_div.hidden = true
+      clearChecked
       
       var label = form.elements.s40.labels[0].innerText
       if (form.elements.s39.value != "") form.elements.s40.labels[0].innerText = label.replace ("@",form.elements.s39.value)
