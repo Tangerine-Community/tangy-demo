@@ -1,0 +1,645 @@
+
+<!DOCTYPE html>
+  <html>
+  <head>
+    <link rel="import" href="../bower_components/tangy-timed/tangy-timed.html">
+    <link rel="import" href="../bower_components/tangy-form/tangy-form.html">
+    <link rel="import" href="../bower_components/paper-time-picker/paper-time-picker.html">
+    <link rel="import" href="../bower_components/paper-date-picker/paper-date-picker.html">
+    <script src="../bower_components/pouchdb/dist/pouchdb.js"> </script>
+    <script src="../bower_components/ckeditor/ckeditor.js"> </script>
+    <script src="../js/helper.js"> </script>
+
+    <script> 
+        function debug (form) {
+            debugger;
+            //console.log(form.children.s35_div.hidden + ':' + checked.indexOf("4") )
+            dependantOnGrid("oral_read", "read_comp8_div", ">", 8)
+            dependantOnGrid("oral_read", "read_comp14_div", ">", 14)
+            dependantOnGrid("oral_read", "read_comp20_div1", ">", 20)
+            dependantOnGrid("oral_read", "read_comp20_div2", ">", 20)
+            dependantOnGrid("oral_read", "read_comp20_div3", ">", 20)
+          
+            elementIs("s4","s5_div",1)
+            elementIs("s11","s12_div",1)
+            //if ((valueInMultiselect('s34')).indexOf("4") != -1) form.children.s35_div.hidden = false; else form.children.s35_div.hidden = true
+
+            replacePrompt("s39","s40","@")
+
+            numberGridErrors("on_word", "s41_div", ">", 10)
+
+            if (form.elements.s36.value != ""  &  form.elements.s38.value != "") {form.children.s12_div.hidden = false; form.elements.s42.value = parseInt(form.elements.s36.value)+parseInt(form.elements.s38.value)}
+
+            if (form.elements.studentId.value == '') form.elements.studentId.value = generateId()
+            if (parseInt(form.elements.s42.value) > 10) form.children.questions.hidden = true; else form.children.questions.hidden = false
+ 
+            setDefaultValueRadio('s5_999')
+            setDefaultValueRadio('s12_999')
+        } 
+    </script>
+    <style>
+      paper-card {
+        margin: 15px 0px;
+        padding: 25px;
+      }
+    </style>
+  </head>
+  <body>
+  <tangy-form id="egra-html-form">
+    <div id="editor">
+    <form action="" onchange="
+    debug(this)
+    
+    ">
+        <paper-card>
+            GSP and Location
+             <select id="formly_1_select_country" name="selectCountry" >
+                        <option value="">---Select---</option>
+                        <option value="AU">Australia</option>
+                        <option value="US">United States</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="ZM">Zambia</option>
+            </select>
+            
+            
+            <select id="formly_1_select_city_1" name="selectCity" hidden>
+                <option value="washington">Washington</option>
+                <option value="newyork">New York</option>
+      
+            </select>
+ 
+           
+        </paper-card>
+<br/>
+<h2>Kiswahili/English Lesson Observation - without pupils books</h2>
+
+
+    <paper-card>
+        <paper-time-picker id="timePicker" name="timePicker"></paper-time-picker>
+    </paper-card>
+
+    <paper-card>
+        <paper-date-picker id="datePicker" name="datePicker"></paper-date-picker>    
+    </paper-card>
+
+    <h3>Demographics</h3>
+        <br/>
+        <paper-card>
+            Class<br/>
+            <input type="radio" id="class_1" name="class" value="1">1<br/>
+            <input type="radio" id="class_2" name="class" value="2">2<br/>
+        </paper-card>
+        <br/> 
+        <paper-card>
+            Does this class have streams?<br/>
+            <input type="radio" id="stream_1" name="stream" value="1">Yes<br/>
+            <input type="radio" id="stream_2" name="stream" value="0">No<br/>
+        </paper-card>
+        <br/> 
+        <!-- TBD dependents on above = 1-->
+        <paper-card>
+            Stream observed<br/>
+            <input type="input" id="stream_name" name="stream_name"><br/>
+        </paper-card>
+        </br>
+        <paper-card>
+            Subject?<br/>
+            <input type="radio" id="subject_1" name="subject" value="english_word">English<br/>
+            <input type="radio" id="subject_2" name="subject" value="word">Kiswahili<br/>
+        </paper-card>
+        <br/> 
+        <paper-card>
+            Lesson week<br/>
+            <input type="radio" id="lesson_week_1" name="lesson_week" value="1">Week 1<br/>
+            <input type="radio" id="lesson_week_2" name="lesson_week" value="2">Week 2<br/>
+            <input type="radio" id="lesson_week_3" name="lesson_week" value="3">Week 3<br/>
+            <input type="radio" id="lesson_week_4" name="lesson_week" value="4">Week 4<br/>
+            <input type="radio" id="lesson_week_5" name="lesson_week" value="5">Week 5<br/>
+            <input type="radio" id="lesson_week_6" name="lesson_week" value="6">Week 6<br/>
+            <input type="radio" id="lesson_week_7" name="lesson_week" value="7">Week 7<br/>
+            <input type="radio" id="lesson_week_8" name="lesson_week" value="8">Week 8<br/>
+        </paper-card>
+        <br/> 
+        <paper-card>
+            Lesson day<br/>
+            <input type="radio" id="lesson_day_1" name="lesson_day" value="1">Day 1<br/>
+            <input type="radio" id="lesson_day_2" name="lesson_day" value="2">Day 2<br/>
+            <input type="radio" id="lesson_day_3" name="lesson_day" value="3">Day 3<br/>
+            <input type="radio" id="lesson_day_4" name="lesson_day" value="4">Day 4<br/>
+            <input type="radio" id="lesson_day_5" name="lesson_day" value="5">Day 5<br/>
+        </paper-card>
+        <br/> 
+        <paper-card>
+            Number of visits this month<br/>
+            <input type="radio" id="visit_number_1" name="visit_number" value="1">1<br/>
+            <input type="radio" id="visit_number_2" name="visit_number" value="2">2<br/>
+            <input type="radio" id="visit_number_3" name="visit_number" value="3">3<br/>
+            <input type="radio" id="visit_number_4" name="visit_number" value="4">4<br/>
+            <input type="radio" id="visit_number_5" name="visit_number" value="5">5<br/>
+        </paper-card>
+        <br/> 
+
+
+<!-- TBD@getVariable("subject") is "kiswahili" -->    
+<p>Hi CSO, you are about to conduct the pupil assessment. Please select three pupils randomly. Give them the laminated paper with the stories (stimulus), having opened it on the right page. Make sure it is the correct term, class and subject.</p> <u>Reading story loudly</u><p> <i>Show the Pupil the story and say this,</i></p> <p><b>Here is a short story. I would like you to carefully read it aloud as fast as you can. Have you understood what you are supposed to do? When I say, please read the story carefully, loudly and as fast as you can. I will keep quiet as you read, are you ready? Please start.</b></p>
+
+
+<!-- TBD@getVariable("subject") is "english" -->    
+
+<p>Hi CSO, you are about to conduct the pupil assessment. Please select three pupils randomly. Give them the laminated paper with the stories (stimulus), having opened it on the right page. Make sure it is the correct term, class and subject.</p> <u>Reading story loudly</u><p> <i>Show the Pupil the story and say this,</i></p> <p><b>Here is a short story. I would like you to carefully read it aloud as fast as you can. Have you understood what you are supposed to do? When I say, please read the story carefully, loudly and as fast as you can. I will keep quiet as you read, are you ready? Please start.</b></p>
+
+
+
+<h2>Curriculum</h2>
+English Class 3 - Term 1
+<tangy-timed id="class3_term1" duration=60>
+
+    <table>
+        <tr>
+ <td> <input id='class3_term1_Hippo1' name='class3_term1_Hippo1' type='checkbox'  /> <label for='class3_term1_Hippo1'>Hippo </label> </td>	
+ <td> <input id='class3_term1_were2' name='class3_term1_were2' type='checkbox'  /> <label for='class3_term1_were2'>were </label> </td>	
+ <td> <input id='class3_term1_good3' name='class3_term1_good3' type='checkbox'  /> <label for='class3_term1_good3'>good </label> </td>	
+ <td> <input id='class3_term1_friends.4' name='class3_term1_friends.4' type='checkbox'  /> <label for='class3_term1_friends.4'>friends. </label> </td>	
+ <td> <input id='class3_term1_They5' name='class3_term1_They5' type='checkbox'  /> <label for='class3_term1_They5'>They </label> </td>	
+</tr>
+<tr>
+ <td> <input id='class3_term1_lived6' name='class3_term1_lived6' type='checkbox'  /> <label for='class3_term1_lived6'>lived </label> </td>	
+ <td> <input id='class3_term1_in7' name='class3_term1_in7' type='checkbox'  /> <label for='class3_term1_in7'>in </label> </td>	
+ <td> <input id='class3_term1_the8' name='class3_term1_the8' type='checkbox'  /> <label for='class3_term1_the8'>the </label> </td>	
+ <td> <input id='class3_term1_lake.9' name='class3_term1_lake.9' type='checkbox'  /> <label for='class3_term1_lake.9'>lake. </label> </td>	
+ <td> <input id='class3_term1_Frog10' name='class3_term1_Frog10' type='checkbox'  /> <label for='class3_term1_Frog10'>Frog </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_and11' name='class3_term1_and11' type='checkbox'  /> <label for='class3_term1_and11'>and </label> </td>	
+ <td> <input id='class3_term1_Hippo12' name='class3_term1_Hippo12' type='checkbox'  /> <label for='class3_term1_Hippo12'>Hippo </label> </td>	
+ <td> <input id='class3_term1_liked13' name='class3_term1_liked13' type='checkbox'  /> <label for='class3_term1_liked13'>liked </label> </td>	
+ <td> <input id='class3_term1_to14' name='class3_term1_to14' type='checkbox'  /> <label for='class3_term1_to14'>to </label> </td>	
+ <td> <input id='class3_term1_play15' name='class3_term1_play15' type='checkbox'  /> <label for='class3_term1_play15'>play </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_in16' name='class3_term1_in16' type='checkbox'  /> <label for='class3_term1_in16'>in </label> </td>	
+ <td> <input id='class3_term1_the17' name='class3_term1_the17' type='checkbox'  /> <label for='class3_term1_the17'>the </label> </td>	
+ <td> <input id='class3_term1_water.18' name='class3_term1_water.18' type='checkbox'  /> <label for='class3_term1_water.18'>water. </label> </td>	
+ <td> <input id='class3_term1_The19' name='class3_term1_The19' type='checkbox'  /> <label for='class3_term1_The19'>The </label> </td>	
+ <td> <input id='class3_term1_two20' name='class3_term1_two20' type='checkbox'  /> <label for='class3_term1_two20'>two </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_friends21' name='class3_term1_friends21' type='checkbox'  /> <label for='class3_term1_friends21'>friends </label> </td>	
+ <td> <input id='class3_term1_also22' name='class3_term1_also22' type='checkbox'  /> <label for='class3_term1_also22'>also </label> </td>	
+ <td> <input id='class3_term1_liked23' name='class3_term1_liked23' type='checkbox'  /> <label for='class3_term1_liked23'>liked </label> </td>	
+ <td> <input id='class3_term1_to24' name='class3_term1_to24' type='checkbox'  /> <label for='class3_term1_to24'>to </label> </td>	
+ <td> <input id='class3_term1_swim25' name='class3_term1_swim25' type='checkbox'  /> <label for='class3_term1_swim25'>swim </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_together.26' name='class3_term1_together.26' type='checkbox'  /> <label for='class3_term1_together.26'>together. </label> </td>	
+ <td> <input id='class3_term1_Sometimes27' name='class3_term1_Sometimes27' type='checkbox'  /> <label for='class3_term1_Sometimes27'>Sometimes </label> </td>	
+ <td> <input id='class3_term1_they28' name='class3_term1_they28' type='checkbox'  /> <label for='class3_term1_they28'>they </label> </td>	
+ <td> <input id='class3_term1_played29' name='class3_term1_played29' type='checkbox'  /> <label for='class3_term1_played29'>played </label> </td>	
+ <td> <input id='class3_term1_on30' name='class3_term1_on30' type='checkbox'  /> <label for='class3_term1_on30'>on </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_the31' name='class3_term1_the31' type='checkbox'  /> <label for='class3_term1_the31'>the </label> </td>	
+ <td> <input id='class3_term1_lake32' name='class3_term1_lake32' type='checkbox'  /> <label for='class3_term1_lake32'>lake </label> </td>	
+ <td> <input id='class3_term1_shore33' name='class3_term1_shore33' type='checkbox'  /> <label for='class3_term1_shore33'>shore </label> </td>	
+ <td> <input id='class3_term1_and34' name='class3_term1_and34' type='checkbox'  /> <label for='class3_term1_and34'>and </label> </td>	
+ <td> <input id='class3_term1_enjoyed35' name='class3_term1_enjoyed35' type='checkbox'  /> <label for='class3_term1_enjoyed35'>enjoyed </label> </td>	
+</tr>
+<tr>
+ <td> <input id='class3_term1_the36' name='class3_term1_the36' type='checkbox'  /> <label for='class3_term1_the36'>the </label> </td>	
+ <td> <input id='class3_term1_warm37' name='class3_term1_warm37' type='checkbox'  /> <label for='class3_term1_warm37'>warm </label> </td>	
+ <td> <input id='class3_term1_sun.38' name='class3_term1_sun.38' type='checkbox'  /> <label for='class3_term1_sun.38'>sun. </label> </td>	
+ <td> <input id='class3_term1_One39' name='class3_term1_One39' type='checkbox'  /> <label for='class3_term1_One39'>One </label> </td>	
+ <td> <input id='class3_term1_day,40' name='class3_term1_day,40' type='checkbox'  /> <label for='class3_term1_day,40'>day, </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_there41' name='class3_term1_there41' type='checkbox'  /> <label for='class3_term1_there41'>there </label> </td>	
+ <td> <input id='class3_term1_was42' name='class3_term1_was42' type='checkbox'  /> <label for='class3_term1_was42'>was </label> </td>	
+ <td> <input id='class3_term1_so43' name='class3_term1_so43' type='checkbox'  /> <label for='class3_term1_so43'>so </label> </td>	
+ <td> <input id='class3_term1_much44' name='class3_term1_much44' type='checkbox'  /> <label for='class3_term1_much44'>much </label> </td>	
+ <td> <input id='class3_term1_rain.45' name='class3_term1_rain.45' type='checkbox'  /> <label for='class3_term1_rain.45'>rain. </label> </td>	
+</tr>
+<tr>
+ <td> <input id='class3_term1_The46' name='class3_term1_The46' type='checkbox'  /> <label for='class3_term1_The46'>The </label> </td>	
+ <td> <input id='class3_term1_big47' name='class3_term1_big47' type='checkbox'  /> <label for='class3_term1_big47'>big </label> </td>	
+ <td> <input id='class3_term1_river48' name='class3_term1_river48' type='checkbox'  /> <label for='class3_term1_river48'>river </label> </td>	
+ <td> <input id='class3_term1_had49' name='class3_term1_had49' type='checkbox'  /> <label for='class3_term1_had49'>had </label> </td>	
+ <td> <input id='class3_term1_so50' name='class3_term1_so50' type='checkbox'  /> <label for='class3_term1_so50'>so </label> </td>	
+</tr>
+<tr>
+ <td> <input id='class3_term1_much51' name='class3_term1_much51' type='checkbox'  /> <label for='class3_term1_much51'>much </label> </td>	
+ <td> <input id='class3_term1_water.52' name='class3_term1_water.52' type='checkbox'  /> <label for='class3_term1_water.52'>water. </label> </td>	
+ <td> <input id='class3_term1_There53' name='class3_term1_There53' type='checkbox'  /> <label for='class3_term1_There53'>There </label> </td>	
+ <td> <input id='class3_term1_was54' name='class3_term1_was54' type='checkbox'  /> <label for='class3_term1_was54'>was </label> </td>	
+ <td> <input id='class3_term1_a55' name='class3_term1_a55' type='checkbox'  /> <label for='class3_term1_a55'>a </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_big56' name='class3_term1_big56' type='checkbox'  /> <label for='class3_term1_big56'>big </label> </td>	
+ <td> <input id='class3_term1_crocodile57' name='class3_term1_crocodile57' type='checkbox'  /> <label for='class3_term1_crocodile57'>crocodile </label> </td>	
+ <td> <input id='class3_term1_that58' name='class3_term1_that58' type='checkbox'  /> <label for='class3_term1_that58'>that </label> </td>	
+ <td> <input id='class3_term1_lived59' name='class3_term1_lived59' type='checkbox'  /> <label for='class3_term1_lived59'>lived </label> </td>	
+ <td> <input id='class3_term1_in60' name='class3_term1_in60' type='checkbox'  /> <label for='class3_term1_in60'>in </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_the61' name='class3_term1_the61' type='checkbox'  /> <label for='class3_term1_the61'>the </label> </td>	
+ <td> <input id='class3_term1_river.62' name='class3_term1_river.62' type='checkbox'  /> <label for='class3_term1_river.62'>river. </label> </td>	
+ <td> <input id='class3_term1_The63' name='class3_term1_The63' type='checkbox'  /> <label for='class3_term1_The63'>The </label> </td>	
+ <td> <input id='class3_term1_crocodile64' name='class3_term1_crocodile64' type='checkbox'  /> <label for='class3_term1_crocodile64'>crocodile </label> </td>	
+ <td> <input id='class3_term1_was65' name='class3_term1_was65' type='checkbox'  /> <label for='class3_term1_was65'>was </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_pushed66' name='class3_term1_pushed66' type='checkbox'  /> <label for='class3_term1_pushed66'>pushed </label> </td>	
+ <td> <input id='class3_term1_by67' name='class3_term1_by67' type='checkbox'  /> <label for='class3_term1_by67'>by </label> </td>	
+ <td> <input id='class3_term1_the68' name='class3_term1_the68' type='checkbox'  /> <label for='class3_term1_the68'>the </label> </td>	
+ <td> <input id='class3_term1_rain69' name='class3_term1_rain69' type='checkbox'  /> <label for='class3_term1_rain69'>rain </label> </td>	
+ <td> <input id='class3_term1_water70' name='class3_term1_water70' type='checkbox'  /> <label for='class3_term1_water70'>water </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_into71' name='class3_term1_into71' type='checkbox'  /> <label for='class3_term1_into71'>into </label> </td>	
+ <td> <input id='class3_term1_the72' name='class3_term1_the72' type='checkbox'  /> <label for='class3_term1_the72'>the </label> </td>	
+ <td> <input id='class3_term1_lake.73' name='class3_term1_lake.73' type='checkbox'  /> <label for='class3_term1_lake.73'>lake. </label> </td>	
+ <td> <input id='class3_term1_Frog74' name='class3_term1_Frog74' type='checkbox'  /> <label for='class3_term1_Frog74'>Frog </label> </td>	
+ <td> <input id='class3_term1_and75' name='class3_term1_and75' type='checkbox'  /> <label for='class3_term1_and75'>and </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_Hippo76' name='class3_term1_Hippo76' type='checkbox'  /> <label for='class3_term1_Hippo76'>Hippo </label> </td>	
+ <td> <input id='class3_term1_were77' name='class3_term1_were77' type='checkbox'  /> <label for='class3_term1_were77'>were </label> </td>	
+ <td> <input id='class3_term1_very78' name='class3_term1_very78' type='checkbox'  /> <label for='class3_term1_very78'>very </label> </td>	
+ <td> <input id='class3_term1_afraid.79' name='class3_term1_afraid.79' type='checkbox'  /> <label for='class3_term1_afraid.79'>afraid. </label> </td>	
+ <td> <input id='class3_term1_The80' name='class3_term1_The80' type='checkbox'  /> <label for='class3_term1_The80'>The </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_crocodile81' name='class3_term1_crocodile81' type='checkbox'  /> <label for='class3_term1_crocodile81'>crocodile </label> </td>	
+ <td> <input id='class3_term1_was82' name='class3_term1_was82' type='checkbox'  /> <label for='class3_term1_was82'>was </label> </td>	
+ <td> <input id='class3_term1_also83' name='class3_term1_also83' type='checkbox'  /> <label for='class3_term1_also83'>also </label> </td>	
+ <td> <input id='class3_term1_afraid84' name='class3_term1_afraid84' type='checkbox'  /> <label for='class3_term1_afraid84'>afraid </label> </td>	
+ <td> <input id='class3_term1_to85' name='class3_term1_to85' type='checkbox'  /> <label for='class3_term1_to85'>to </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_be86' name='class3_term1_be86' type='checkbox'  /> <label for='class3_term1_be86'>be </label> </td>	
+ <td> <input id='class3_term1_in87' name='class3_term1_in87' type='checkbox'  /> <label for='class3_term1_in87'>in </label> </td>	
+ <td> <input id='class3_term1_the88' name='class3_term1_the88' type='checkbox'  /> <label for='class3_term1_the88'>the </label> </td>	
+ <td> <input id='class3_term1_lake.89' name='class3_term1_lake.89' type='checkbox'  /> <label for='class3_term1_lake.89'>lake. </label> </td>	
+ <td> <input id='class3_term1_To90' name='class3_term1_To90' type='checkbox'  /> <label for='class3_term1_To90'>To </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_make91' name='class3_term1_make91' type='checkbox'  /> <label for='class3_term1_make91'>make </label> </td>	
+ <td> <input id='class3_term1_the92' name='class3_term1_the92' type='checkbox'  /> <label for='class3_term1_the92'>the </label> </td>	
+ <td> <input id='class3_term1_crocodile93' name='class3_term1_crocodile93' type='checkbox'  /> <label for='class3_term1_crocodile93'>crocodile </label> </td>	
+ <td> <input id='class3_term1_go94' name='class3_term1_go94' type='checkbox'  /> <label for='class3_term1_go94'>go </label> </td>	
+ <td> <input id='class3_term1_away,95' name='class3_term1_away,95' type='checkbox'  /> <label for='class3_term1_away,95'>away, </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_hippo96' name='class3_term1_hippo96' type='checkbox'  /> <label for='class3_term1_hippo96'>hippo </label> </td>	
+ <td> <input id='class3_term1_made97' name='class3_term1_made97' type='checkbox'  /> <label for='class3_term1_made97'>made </label> </td>	
+ <td> <input id='class3_term1_a98' name='class3_term1_a98' type='checkbox'  /> <label for='class3_term1_a98'>a </label> </td>	
+ <td> <input id='class3_term1_very99' name='class3_term1_very99' type='checkbox'  /> <label for='class3_term1_very99'>very </label> </td>	
+ <td> <input id='class3_term1_big100' name='class3_term1_big100' type='checkbox'  /> <label for='class3_term1_big100'>big </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_sound.101' name='class3_term1_sound.101' type='checkbox'  /> <label for='class3_term1_sound.101'>sound. </label> </td>	
+ <td> <input id='class3_term1_Crocodile102' name='class3_term1_Crocodile102' type='checkbox'  /> <label for='class3_term1_Crocodile102'>Crocodile </label> </td>	
+ <td> <input id='class3_term1_got103' name='class3_term1_got103' type='checkbox'  /> <label for='class3_term1_got103'>got </label> </td>	
+ <td> <input id='class3_term1_scared104' name='class3_term1_scared104' type='checkbox'  /> <label for='class3_term1_scared104'>scared </label> </td>	
+ <td> <input id='class3_term1_and105' name='class3_term1_and105' type='checkbox'  /> <label for='class3_term1_and105'>and </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_swam106' name='class3_term1_swam106' type='checkbox'  /> <label for='class3_term1_swam106'>swam </label> </td>	
+ <td> <input id='class3_term1_back107' name='class3_term1_back107' type='checkbox'  /> <label for='class3_term1_back107'>back </label> </td>	
+ <td> <input id='class3_term1_to108' name='class3_term1_to108' type='checkbox'  /> <label for='class3_term1_to108'>to </label> </td>	
+ <td> <input id='class3_term1_the109' name='class3_term1_the109' type='checkbox'  /> <label for='class3_term1_the109'>the </label> </td>	
+ <td> <input id='class3_term1_big110' name='class3_term1_big110' type='checkbox'  /> <label for='class3_term1_big110'>big </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_river.111' name='class3_term1_river.111' type='checkbox'  /> <label for='class3_term1_river.111'>river. </label> </td>	
+ <td> <input id='class3_term1_Hippo112' name='class3_term1_Hippo112' type='checkbox'  /> <label for='class3_term1_Hippo112'>Hippo </label> </td>	
+ <td> <input id='class3_term1_and113' name='class3_term1_and113' type='checkbox'  /> <label for='class3_term1_and113'>and </label> </td>	
+ <td> <input id='class3_term1_Frog114' name='class3_term1_Frog114' type='checkbox'  /> <label for='class3_term1_Frog114'>Frog </label> </td>	
+ <td> <input id='class3_term1_were115' name='class3_term1_were115' type='checkbox'  /> <label for='class3_term1_were115'>were </label> </td>	
+</tr>
+<tr> 
+ <td> <input id='class3_term1_not116' name='class3_term1_not116' type='checkbox'  /> <label for='class3_term1_not116'>not </label> </td>	
+ <td> <input id='class3_term1_afraid117' name='class3_term1_afraid117' type='checkbox'  /> <label for='class3_term1_afraid117'>afraid </label> </td>	
+ <td> <input id='class3_term1_any118' name='class3_term1_any118' type='checkbox'  /> <label for='class3_term1_any118'>any </label> </td>	
+ <td> <input id='class3_term1_more.119' name='class3_term1_more.119' type='checkbox'  /> <label for='class3_term1_more.119'>more. </label> </td>	
+ <td> <input id='class3_term1_The120' name='class3_term1_The120' type='checkbox'  /> <label for='class3_term1_The120'>The </label> </td>	
+</tr>
+<tr>
+ <td> <input id='class3_term1_two121' name='class3_term1_two121' type='checkbox'  /> <label for='class3_term1_two121'>two </label> </td>	
+ <td> <input id='class3_term1_friends122' name='class3_term1_friends122' type='checkbox'  /> <label for='class3_term1_friends122'>friends </label> </td>	
+ <td> <input id='class3_term1_were123' name='class3_term1_were123' type='checkbox'  /> <label for='class3_term1_were123'>were </label> </td>	
+ <td> <input id='class3_term1_happy124' name='class3_term1_happy124' type='checkbox'  /> <label for='class3_term1_happy124'>happy </label> </td>	
+ <td> <input id='class3_term1_and125' name='class3_term1_and125' type='checkbox'  /> <label for='class3_term1_and125'>and </label> </td>	
+</tr>
+<tr>
+ <td> <input id='class3_term1_safe.126' name='class3_term1_safe.126' type='checkbox'  /> <label for='class3_term1_safe.126'>safe. </label> </td>	
+ <td></td>
+<td> </td> 
+<td></td>
+<td></td>
+<td></td>
+        </tr>
+    </table>
+
+    <input name="class3_term1_time_remaining" id="class3_term1_time_remaining" type="hidden">
+    <input name="class3_term1_time_spent" id="class3_term1_time_spent" type="hidden">
+    <input name="class3_term1_last_selected_id" id="class3_term1_last_selected_id" type="hidden">
+    <input name="class3_term1_last_selected_nth" id="class3_term1_last_selected_nth" type="hidden">
+    <input name="class3_term1_items_per_minute" id="class3_term1_items_per_minute" type="hidden">
+    <input name="class3_term1_number_of_items_marked" id="class3_term1_number_of_items_marked" type="hidden"> 
+</tangy-timed>
+
+
+
+English Class 3 - Term 2
+Tina and Ken liked to play racing games. One Thursday evening, the two children decided to race on the way home. They raced down the footpath and over the small bridge. Ken was ahead of Tina. As they approached a small hill, Ken started to feel tired. He slowed down and Tina ran past him. Ken tried to run faster but then he fell down and got hurt. Ken cried out, “Tina! Please help me. I am hurt”. Tina stopped and ran back to Ken. There was some blood on Ken’s knee. Tina helped Ken to walk home. At home mother washed the wound with some clean water. She used a piece of cloth to bandage Ken’s knee. Tina felt sorry for Ken. After one week Ken’s knee was not painful. Tina and Ken were careful as they played.
+
+<tangy-timed id="class3_term1" duration=60>
+        
+            <table>
+                <tr>
+<td> <input id='class3_term2_Tina1' name='class3_term2_Tina1' type='checkbox'  /> <label for='class3_term2_Tina1'>Tina </label> </td>	
+<td> <input id='class3_term2_and2' name='class3_term2_and2' type='checkbox'  /> <label for='class3_term2_and2'>and </label> </td>	
+<td> <input id='class3_term2_Ken3' name='class3_term2_Ken3' type='checkbox'  /> <label for='class3_term2_Ken3'>Ken </label> </td>	
+<td> <input id='class3_term2_liked4' name='class3_term2_liked4' type='checkbox'  /> <label for='class3_term2_liked4'>liked </label> </td>	
+<td> <input id='class3_term2_to5' name='class3_term2_to5' type='checkbox'  /> <label for='class3_term2_to5'>to </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_play6' name='class3_term2_play6' type='checkbox'  /> <label for='class3_term2_play6'>play </label> </td>	
+<td> <input id='class3_term2_racing7' name='class3_term2_racing7' type='checkbox'  /> <label for='class3_term2_racing7'>racing </label> </td>	
+<td> <input id='class3_term2_games.8' name='class3_term2_games.8' type='checkbox'  /> <label for='class3_term2_games.8'>games. </label> </td>	
+<td> <input id='class3_term2_One9' name='class3_term2_One9' type='checkbox'  /> <label for='class3_term2_One9'>One </label> </td>	
+<td> <input id='class3_term2_Thursday10' name='class3_term2_Thursday10' type='checkbox'  /> <label for='class3_term2_Thursday10'>Thursday </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_evening,11' name='class3_term2_evening,11' type='checkbox'  /> <label for='class3_term2_evening,11'>evening, </label> </td>	
+<td> <input id='class3_term2_the12' name='class3_term2_the12' type='checkbox'  /> <label for='class3_term2_the12'>the </label> </td>	
+<td> <input id='class3_term2_two13' name='class3_term2_two13' type='checkbox'  /> <label for='class3_term2_two13'>two </label> </td>	
+<td> <input id='class3_term2_children14' name='class3_term2_children14' type='checkbox'  /> <label for='class3_term2_children14'>children </label> </td>	
+<td> <input id='class3_term2_decided15' name='class3_term2_decided15' type='checkbox'  /> <label for='class3_term2_decided15'>decided </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_to16' name='class3_term2_to16' type='checkbox'  /> <label for='class3_term2_to16'>to </label> </td>	
+<td> <input id='class3_term2_race17' name='class3_term2_race17' type='checkbox'  /> <label for='class3_term2_race17'>race </label> </td>	
+<td> <input id='class3_term2_on18' name='class3_term2_on18' type='checkbox'  /> <label for='class3_term2_on18'>on </label> </td>	
+<td> <input id='class3_term2_the19' name='class3_term2_the19' type='checkbox'  /> <label for='class3_term2_the19'>the </label> </td>	
+<td> <input id='class3_term2_way20' name='class3_term2_way20' type='checkbox'  /> <label for='class3_term2_way20'>way </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_home.21' name='class3_term2_home.21' type='checkbox'  /> <label for='class3_term2_home.21'>home. </label> </td>	
+<td> <input id='class3_term2_They22' name='class3_term2_They22' type='checkbox'  /> <label for='class3_term2_They22'>They </label> </td>	
+<td> <input id='class3_term2_raced23' name='class3_term2_raced23' type='checkbox'  /> <label for='class3_term2_raced23'>raced </label> </td>	
+<td> <input id='class3_term2_down24' name='class3_term2_down24' type='checkbox'  /> <label for='class3_term2_down24'>down </label> </td>	
+<td> <input id='class3_term2_the25' name='class3_term2_the25' type='checkbox'  /> <label for='class3_term2_the25'>the </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_footpath26' name='class3_term2_footpath26' type='checkbox'  /> <label for='class3_term2_footpath26'>footpath </label> </td>	
+<td> <input id='class3_term2_and27' name='class3_term2_and27' type='checkbox'  /> <label for='class3_term2_and27'>and </label> </td>	
+<td> <input id='class3_term2_over28' name='class3_term2_over28' type='checkbox'  /> <label for='class3_term2_over28'>over </label> </td>	
+<td> <input id='class3_term2_the29' name='class3_term2_the29' type='checkbox'  /> <label for='class3_term2_the29'>the </label> </td>	
+<td> <input id='class3_term2_small30' name='class3_term2_small30' type='checkbox'  /> <label for='class3_term2_small30'>small </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_bridge.31' name='class3_term2_bridge.31' type='checkbox'  /> <label for='class3_term2_bridge.31'>bridge. </label> </td>	
+<td> <input id='class3_term2_Ken32' name='class3_term2_Ken32' type='checkbox'  /> <label for='class3_term2_Ken32'>Ken </label> </td>	
+<td> <input id='class3_term2_was33' name='class3_term2_was33' type='checkbox'  /> <label for='class3_term2_was33'>was </label> </td>	
+<td> <input id='class3_term2_ahead34' name='class3_term2_ahead34' type='checkbox'  /> <label for='class3_term2_ahead34'>ahead </label> </td>	
+<td> <input id='class3_term2_of35' name='class3_term2_of35' type='checkbox'  /> <label for='class3_term2_of35'>of </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_Tina.36' name='class3_term2_Tina.36' type='checkbox'  /> <label for='class3_term2_Tina.36'>Tina. </label> </td>	
+<td> <input id='class3_term2_As37' name='class3_term2_As37' type='checkbox'  /> <label for='class3_term2_As37'>As </label> </td>	
+<td> <input id='class3_term2_they38' name='class3_term2_they38' type='checkbox'  /> <label for='class3_term2_they38'>they </label> </td>	
+<td> <input id='class3_term2_approached39' name='class3_term2_approached39' type='checkbox'  /> <label for='class3_term2_approached39'>approached </label> </td>	
+<td> <input id='class3_term2_a40' name='class3_term2_a40' type='checkbox'  /> <label for='class3_term2_a40'>a </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_small41' name='class3_term2_small41' type='checkbox'  /> <label for='class3_term2_small41'>small </label> </td>	
+<td> <input id='class3_term2_hill,42' name='class3_term2_hill,42' type='checkbox'  /> <label for='class3_term2_hill,42'>hill, </label> </td>	
+<td> <input id='class3_term2_Ken43' name='class3_term2_Ken43' type='checkbox'  /> <label for='class3_term2_Ken43'>Ken </label> </td>	
+<td> <input id='class3_term2_started44' name='class3_term2_started44' type='checkbox'  /> <label for='class3_term2_started44'>started </label> </td>	
+<td> <input id='class3_term2_to45' name='class3_term2_to45' type='checkbox'  /> <label for='class3_term2_to45'>to </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_feel46' name='class3_term2_feel46' type='checkbox'  /> <label for='class3_term2_feel46'>feel </label> </td>	
+<td> <input id='class3_term2_tired.47' name='class3_term2_tired.47' type='checkbox'  /> <label for='class3_term2_tired.47'>tired. </label> </td>	
+<td> <input id='class3_term2_He48' name='class3_term2_He48' type='checkbox'  /> <label for='class3_term2_He48'>He </label> </td>	
+<td> <input id='class3_term2_slowed49' name='class3_term2_slowed49' type='checkbox'  /> <label for='class3_term2_slowed49'>slowed </label> </td>	
+<td> <input id='class3_term2_down50' name='class3_term2_down50' type='checkbox'  /> <label for='class3_term2_down50'>down </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_and51' name='class3_term2_and51' type='checkbox'  /> <label for='class3_term2_and51'>and </label> </td>	
+<td> <input id='class3_term2_Tina52' name='class3_term2_Tina52' type='checkbox'  /> <label for='class3_term2_Tina52'>Tina </label> </td>	
+<td> <input id='class3_term2_ran53' name='class3_term2_ran53' type='checkbox'  /> <label for='class3_term2_ran53'>ran </label> </td>	
+<td> <input id='class3_term2_past54' name='class3_term2_past54' type='checkbox'  /> <label for='class3_term2_past54'>past </label> </td>	
+<td> <input id='class3_term2_him.55' name='class3_term2_him.55' type='checkbox'  /> <label for='class3_term2_him.55'>him. </label> </td>	
+</tr>
+<tr>
+<td> <input id='class3_term2_Ken56' name='class3_term2_Ken56' type='checkbox'  /> <label for='class3_term2_Ken56'>Ken </label> </td>	
+<td> <input id='class3_term2_tried57' name='class3_term2_tried57' type='checkbox'  /> <label for='class3_term2_tried57'>tried </label> </td>	
+<td> <input id='class3_term2_to58' name='class3_term2_to58' type='checkbox'  /> <label for='class3_term2_to58'>to </label> </td>	
+<td> <input id='class3_term2_run59' name='class3_term2_run59' type='checkbox'  /> <label for='class3_term2_run59'>run </label> </td>	
+<td> <input id='class3_term2_faster60' name='class3_term2_faster60' type='checkbox'  /> <label for='class3_term2_faster60'>faster </label> </td>	
+</tr>
+<tr><td> <input id='class3_term2_but61' name='class3_term2_but61' type='checkbox'  /> <label for='class3_term2_but61'>but </label> </td>	
+<td> <input id='class3_term2_then62' name='class3_term2_then62' type='checkbox'  /> <label for='class3_term2_then62'>then </label> </td>	
+<td> <input id='class3_term2_he63' name='class3_term2_he63' type='checkbox'  /> <label for='class3_term2_he63'>he </label> </td>	
+<td> <input id='class3_term2_fell64' name='class3_term2_fell64' type='checkbox'  /> <label for='class3_term2_fell64'>fell </label> </td>	
+<td> <input id='class3_term2_down65' name='class3_term2_down65' type='checkbox'  /> <label for='class3_term2_down65'>down </label> </td>	
+<td> <input id='class3_term2_and66' name='class3_term2_and66' type='checkbox'  /> <label for='class3_term2_and66'>and </label> </td>	
+<td> <input id='class3_term2_got67' name='class3_term2_got67' type='checkbox'  /> <label for='class3_term2_got67'>got </label> </td>	
+<td> <input id='class3_term2_hurt.68' name='class3_term2_hurt.68' type='checkbox'  /> <label for='class3_term2_hurt.68'>hurt. </label> </td>	
+<td> <input id='class3_term2_Ken69' name='class3_term2_Ken69' type='checkbox'  /> <label for='class3_term2_Ken69'>Ken </label> </td>	
+<td> <input id='class3_term2_cried70' name='class3_term2_cried70' type='checkbox'  /> <label for='class3_term2_cried70'>cried </label> </td>	
+<td> <input id='class3_term2_out,71' name='class3_term2_out,71' type='checkbox'  /> <label for='class3_term2_out,71'>out, </label> </td>	
+<td> <input id='class3_term2_“Tina!72' name='class3_term2_“Tina!72' type='checkbox'  /> <label for='class3_term2_“Tina!72'>“Tina! </label> </td>	
+<td> <input id='class3_term2_Please73' name='class3_term2_Please73' type='checkbox'  /> <label for='class3_term2_Please73'>Please </label> </td>	
+<td> <input id='class3_term2_help74' name='class3_term2_help74' type='checkbox'  /> <label for='class3_term2_help74'>help </label> </td>	
+<td> <input id='class3_term2_me.75' name='class3_term2_me.75' type='checkbox'  /> <label for='class3_term2_me.75'>me. </label> </td>	
+<td> <input id='class3_term2_I76' name='class3_term2_I76' type='checkbox'  /> <label for='class3_term2_I76'>I </label> </td>	
+<td> <input id='class3_term2_am77' name='class3_term2_am77' type='checkbox'  /> <label for='class3_term2_am77'>am </label> </td>	
+<td> <input id='class3_term2_hurt”.78' name='class3_term2_hurt”.78' type='checkbox'  /> <label for='class3_term2_hurt”.78'>hurt”. </label> </td>	
+<td> <input id='class3_term2_Tina79' name='class3_term2_Tina79' type='checkbox'  /> <label for='class3_term2_Tina79'>Tina </label> </td>	
+<td> <input id='class3_term2_stopped80' name='class3_term2_stopped80' type='checkbox'  /> <label for='class3_term2_stopped80'>stopped </label> </td>	
+<td> <input id='class3_term2_and81' name='class3_term2_and81' type='checkbox'  /> <label for='class3_term2_and81'>and </label> </td>	
+<td> <input id='class3_term2_ran82' name='class3_term2_ran82' type='checkbox'  /> <label for='class3_term2_ran82'>ran </label> </td>	
+<td> <input id='class3_term2_back83' name='class3_term2_back83' type='checkbox'  /> <label for='class3_term2_back83'>back </label> </td>	
+<td> <input id='class3_term2_to84' name='class3_term2_to84' type='checkbox'  /> <label for='class3_term2_to84'>to </label> </td>	
+<td> <input id='class3_term2_Ken.85' name='class3_term2_Ken.85' type='checkbox'  /> <label for='class3_term2_Ken.85'>Ken. </label> </td>	
+<td> <input id='class3_term2_There86' name='class3_term2_There86' type='checkbox'  /> <label for='class3_term2_There86'>There </label> </td>	
+<td> <input id='class3_term2_was87' name='class3_term2_was87' type='checkbox'  /> <label for='class3_term2_was87'>was </label> </td>	
+<td> <input id='class3_term2_some88' name='class3_term2_some88' type='checkbox'  /> <label for='class3_term2_some88'>some </label> </td>	
+<td> <input id='class3_term2_blood89' name='class3_term2_blood89' type='checkbox'  /> <label for='class3_term2_blood89'>blood </label> </td>	
+<td> <input id='class3_term2_on90' name='class3_term2_on90' type='checkbox'  /> <label for='class3_term2_on90'>on </label> </td>	
+<td> <input id='class3_term2_Ken’s91' name='class3_term2_Ken’s91' type='checkbox'  /> <label for='class3_term2_Ken’s91'>Ken’s </label> </td>	
+<td> <input id='class3_term2_knee.92' name='class3_term2_knee.92' type='checkbox'  /> <label for='class3_term2_knee.92'>knee. </label> </td>	
+<td> <input id='class3_term2_Tina93' name='class3_term2_Tina93' type='checkbox'  /> <label for='class3_term2_Tina93'>Tina </label> </td>	
+<td> <input id='class3_term2_helped94' name='class3_term2_helped94' type='checkbox'  /> <label for='class3_term2_helped94'>helped </label> </td>	
+<td> <input id='class3_term2_Ken95' name='class3_term2_Ken95' type='checkbox'  /> <label for='class3_term2_Ken95'>Ken </label> </td>	
+<td> <input id='class3_term2_to96' name='class3_term2_to96' type='checkbox'  /> <label for='class3_term2_to96'>to </label> </td>	
+<td> <input id='class3_term2_walk97' name='class3_term2_walk97' type='checkbox'  /> <label for='class3_term2_walk97'>walk </label> </td>	
+<td> <input id='class3_term2_home.98' name='class3_term2_home.98' type='checkbox'  /> <label for='class3_term2_home.98'>home. </label> </td>	
+<td> <input id='class3_term2_At99' name='class3_term2_At99' type='checkbox'  /> <label for='class3_term2_At99'>At </label> </td>	
+<td> <input id='class3_term2_home100' name='class3_term2_home100' type='checkbox'  /> <label for='class3_term2_home100'>home </label> </td>	
+<td> <input id='class3_term2_mother101' name='class3_term2_mother101' type='checkbox'  /> <label for='class3_term2_mother101'>mother </label> </td>	
+<td> <input id='class3_term2_washed102' name='class3_term2_washed102' type='checkbox'  /> <label for='class3_term2_washed102'>washed </label> </td>	
+<td> <input id='class3_term2_the103' name='class3_term2_the103' type='checkbox'  /> <label for='class3_term2_the103'>the </label> </td>	
+<td> <input id='class3_term2_wound104' name='class3_term2_wound104' type='checkbox'  /> <label for='class3_term2_wound104'>wound </label> </td>	
+<td> <input id='class3_term2_with105' name='class3_term2_with105' type='checkbox'  /> <label for='class3_term2_with105'>with </label> </td>	
+<td> <input id='class3_term2_some106' name='class3_term2_some106' type='checkbox'  /> <label for='class3_term2_some106'>some </label> </td>	
+<td> <input id='class3_term2_clean107' name='class3_term2_clean107' type='checkbox'  /> <label for='class3_term2_clean107'>clean </label> </td>	
+<td> <input id='class3_term2_water.108' name='class3_term2_water.108' type='checkbox'  /> <label for='class3_term2_water.108'>water. </label> </td>	
+<td> <input id='class3_term2_She109' name='class3_term2_She109' type='checkbox'  /> <label for='class3_term2_She109'>She </label> </td>	
+<td> <input id='class3_term2_used110' name='class3_term2_used110' type='checkbox'  /> <label for='class3_term2_used110'>used </label> </td>	
+<td> <input id='class3_term2_a111' name='class3_term2_a111' type='checkbox'  /> <label for='class3_term2_a111'>a </label> </td>	
+<td> <input id='class3_term2_piece112' name='class3_term2_piece112' type='checkbox'  /> <label for='class3_term2_piece112'>piece </label> </td>	
+<td> <input id='class3_term2_of113' name='class3_term2_of113' type='checkbox'  /> <label for='class3_term2_of113'>of </label> </td>	
+<td> <input id='class3_term2_cloth114' name='class3_term2_cloth114' type='checkbox'  /> <label for='class3_term2_cloth114'>cloth </label> </td>	
+<td> <input id='class3_term2_to115' name='class3_term2_to115' type='checkbox'  /> <label for='class3_term2_to115'>to </label> </td>	
+<td> <input id='class3_term2_bandage116' name='class3_term2_bandage116' type='checkbox'  /> <label for='class3_term2_bandage116'>bandage </label> </td>	
+<td> <input id='class3_term2_Ken’s117' name='class3_term2_Ken’s117' type='checkbox'  /> <label for='class3_term2_Ken’s117'>Ken’s </label> </td>	
+<td> <input id='class3_term2_knee.118' name='class3_term2_knee.118' type='checkbox'  /> <label for='class3_term2_knee.118'>knee. </label> </td>	
+<td> <input id='class3_term2_Tina119' name='class3_term2_Tina119' type='checkbox'  /> <label for='class3_term2_Tina119'>Tina </label> </td>	
+<td> <input id='class3_term2_felt120' name='class3_term2_felt120' type='checkbox'  /> <label for='class3_term2_felt120'>felt </label> </td>	
+<td> <input id='class3_term2_sorry121' name='class3_term2_sorry121' type='checkbox'  /> <label for='class3_term2_sorry121'>sorry </label> </td>	
+<td> <input id='class3_term2_for122' name='class3_term2_for122' type='checkbox'  /> <label for='class3_term2_for122'>for </label> </td>	
+<td> <input id='class3_term2_Ken.123' name='class3_term2_Ken.123' type='checkbox'  /> <label for='class3_term2_Ken.123'>Ken. </label> </td>	
+<td> <input id='class3_term2_After124' name='class3_term2_After124' type='checkbox'  /> <label for='class3_term2_After124'>After </label> </td>	
+<td> <input id='class3_term2_one125' name='class3_term2_one125' type='checkbox'  /> <label for='class3_term2_one125'>one </label> </td>	
+<td> <input id='class3_term2_week126' name='class3_term2_week126' type='checkbox'  /> <label for='class3_term2_week126'>week </label> </td>	
+<td> <input id='class3_term2_Ken’s' name='class3_term2_Ken’s' type='checkbox'  /> <label for='class3_term2_Ken’s'>Ken’s </label> </td>
+<td> </td> 
+<td></td>
+<td></td>
+<td></td>
+        </tr>
+    </table>
+
+    <input name="class3_term1_time_remaining" id="class3_term1_time_remaining" type="hidden">
+    <input name="class3_term1_time_spent" id="class3_term1_time_spent" type="hidden">
+    <input name="class3_term1_last_selected_id" id="class3_term1_last_selected_id" type="hidden">
+    <input name="class3_term1_last_selected_nth" id="class3_term1_last_selected_nth" type="hidden">
+    <input name="class3_term1_items_per_minute" id="class3_term1_items_per_minute" type="hidden">
+    <input name="class3_term1_number_of_items_marked" id="class3_term1_number_of_items_marked" type="hidden"> 
+</tangy-timed>
+
+English Class 3 - Term 3
+The New Year began in January and will end in December. We learnt all the days of the week and the months of the year in class one and two. The teacher said we shall learn many more things in class three. Every Monday and Friday we go for assembly and raise the flag. We sing the National anthem and listen to the teachers then run to class. I have many friends in class three. At break time we skip, run, play football and netball and we all enjoy different games. Our books have many pictures of animals, hills and rivers. We learn that child labour is bad. We also learn that before you cross the road, we should look left, right and left again. If the road is clear we cross without running so that we are safe on the road. We learn that we can be a teacher, a doctor, a nurse, a plumber, a policeman or a pilot when we grow up. We must work hard During the holidays we travel to different places. Some children travel by camel, train, aero-plane, bus and ship. Others walk to visit grandparents, uncle, aunt and many relatives. We all have fun.
+<td> </td> 
+<td></td>
+<td></td>
+<td></td>
+        </tr>
+    </table>
+
+    <input name="class3_term1_time_remaining" id="class3_term1_time_remaining" type="hidden">
+    <input name="class3_term1_time_spent" id="class3_term1_time_spent" type="hidden">
+    <input name="class3_term1_last_selected_id" id="class3_term1_last_selected_id" type="hidden">
+    <input name="class3_term1_last_selected_nth" id="class3_term1_last_selected_nth" type="hidden">
+    <input name="class3_term1_items_per_minute" id="class3_term1_items_per_minute" type="hidden">
+    <input name="class3_term1_number_of_items_marked" id="class3_term1_number_of_items_marked" type="hidden"> 
+</tangy-timed>
+
+
+Kiswahili Class 3 - Term 1
+Asubuhi moja, Katana alimtembelea rafiki yake Katheka aliyekuwa anaugua maradhi ya homa. Walitaka kwenda hospitalini. Baba yake Katheka aliketi kwenye kochi huku akisoma gazeti. Kando yake kulikuwa na rafu iliyojaa vitabu. Alipomwona Katana, babake Katheka alimsalimia, “Hujambo?” “Sijambo,” Katana akaitikia. Katana alitamani kuvisoma vitabu vilivyokuwa kwenye rafu. Katana alipomaliza kuoga walitoka kwa haraka na kuelekea hospitali. Baada ya kutibiwa, Katana na Katheka walipitia sokoni. Huko walimwona mwuzaji wa buchari aliyepimia nyama kwenye ratili kubwa. Adhuhuri, waliandamana na kurudi nyumbani kwao.
+<td> </td> 
+<td></td>
+<td></td>
+<td></td>
+        </tr>
+    </table>
+
+    <input name="class3_term1_time_remaining" id="class3_term1_time_remaining" type="hidden">
+    <input name="class3_term1_time_spent" id="class3_term1_time_spent" type="hidden">
+    <input name="class3_term1_last_selected_id" id="class3_term1_last_selected_id" type="hidden">
+    <input name="class3_term1_last_selected_nth" id="class3_term1_last_selected_nth" type="hidden">
+    <input name="class3_term1_items_per_minute" id="class3_term1_items_per_minute" type="hidden">
+    <input name="class3_term1_number_of_items_marked" id="class3_term1_number_of_items_marked" type="hidden"> 
+</tangy-timed>
+
+Kiswahili Class 3 - Term 2
+Paka na nyani walikuwa marafiki. Waliishi nyumbani mwa mzee mmoja aliye wapa malazi na chakula. Kazi ya paka ilikuwa kuwafukuza panya nyumbani. Kazi ya nyani nayo ilikuwa kufanya sarakasi ili kumfurahisha mzee yule. Siku moja paka na nyani walipokuwa wakipita njiani waliona ndizi kwenye ngomba. Paka aliuliza, “Je, ndizi huwa tamu?” Nyani naye akamjibu, “Ndizi ni tamu sana hata kuliko nyama. Panda kwenye mgomba uchume ndizi utupe chini kisha tule pamoja.” Paka alipanda juu ya mgomba na kuchuma ndizi zilizoiva.
+<td> </td> 
+<td></td>
+<td></td>
+<td></td>
+        </tr>
+    </table>
+
+    <input name="class3_term1_time_remaining" id="class3_term1_time_remaining" type="hidden">
+    <input name="class3_term1_time_spent" id="class3_term1_time_spent" type="hidden">
+    <input name="class3_term1_last_selected_id" id="class3_term1_last_selected_id" type="hidden">
+    <input name="class3_term1_last_selected_nth" id="class3_term1_last_selected_nth" type="hidden">
+    <input name="class3_term1_items_per_minute" id="class3_term1_items_per_minute" type="hidden">
+    <input name="class3_term1_number_of_items_marked" id="class3_term1_number_of_items_marked" type="hidden"> 
+</tangy-timed>
+
+Kiswahili Class 3 - Term 3
+Siku moja Waridi alipatiwa pesa za kulipia karo ya shule. Aliambiwa ampelekee karani wa shule. Waridi alizifunga zile pesa kwenye kitambaa. Shuleni alipitia kwenye bustani hadi maktabani. Baadaye alienda kumtafuta karani ili kumpa zile pesa. Karani alikuwa kwenye majilisi kwa mkutano. Karani aliporudi Waridi alitoa kitambaa chake ili kumpa karani pesa. Pesa hazikuwa! Waridi alishtuka sana. Alianza kuzitafuta. Mara tarishi akaingia ofisini. Alisema kuwa alikuwa ameokota pesa kwenye bustani. Walipoona kuwa zilikuwa zile pesa, walifurahi sana. Karani akampa Waridi risiti.
+<td> </td> 
+<td></td>
+<td></td>
+<td></td>
+        </tr>
+    </table>
+
+    <input name="class3_term1_time_remaining" id="class3_term1_time_remaining" type="hidden">
+    <input name="class3_term1_time_spent" id="class3_term1_time_spent" type="hidden">
+    <input name="class3_term1_last_selected_id" id="class3_term1_last_selected_id" type="hidden">
+    <input name="class3_term1_last_selected_nth" id="class3_term1_last_selected_nth" type="hidden">
+    <input name="class3_term1_items_per_minute" id="class3_term1_items_per_minute" type="hidden">
+    <input name="class3_term1_number_of_items_marked" id="class3_term1_number_of_items_marked" type="hidden"> 
+</tangy-timed>
+
+
+	
+<p>Hi CSO, you are about to conduct the pupil assessment. Please select three pupils randomly. Give them the laminated paper with the stories (stimulus), having opened it on the right page. Make sure it is the correct term, class and subject.</p> <u>Reading story loudly</u><p> <i>Show the Pupil the story and say this,</i></p> <p><b>Here is a short story. I would like you to carefully read it aloud as fast as you can. Have you understood what you are supposed to do? When I say, please read the story carefully, loudly and as fast as you can. I will keep quiet as you read, are you ready? Please start.</b></p>
+
+
+
+
+	
+<p>Hi CSO, you are about to conduct the pupil assessment. Please select three pupils randomly. Give them the laminated paper with the stories (stimulus), having opened it on the right page. Make sure it is the correct term, class and subject.</p> <u>Reading story loudly</u><p> <i>Show the Pupil the story and say this,</i></p> <p><b>Here is a short story. I would like you to carefully read it aloud as fast as you can. Have you understood what you are supposed to do? When I say, please read the story carefully, loudly and as fast as you can. I will keep quiet as you read, are you ready? Please start.</b></p>
+
+
+
+<h2>Curriculum</h2>
+English Class 3 - Term 1
+English Class 3 - Term 2
+English Class 3 - Term 3
+Kiswahili Class 3 - Term 1
+Kiswahili Class 3 - Term 2
+Kiswahili Class 3 - Term 3
+
+
+<p>Hi CSO, you are about to conduct the pupil assessment. Please select three pupils randomly. Give them the laminated paper with the stories (stimulus), having opened it on the right page. Make sure it is the correct term, class and subject.</p> <u>Reading story loudly</u><p> <i>Show the Pupil the story and say this,</i></p> <p><b>Here is a short story. I would like you to carefully read it aloud as fast as you can. Have you understood what you are supposed to do? When I say, please read the story carefully, loudly and as fast as you can. I will keep quiet as you read, are you ready? Please start.</b></p>
+
+
+	
+<p>Hi CSO, you are about to conduct the pupil assessment. Please select three pupils randomly. Give them the laminated paper with the stories (stimulus), having opened it on the right page. Make sure it is the correct term, class and subject.</p> <u>Reading story loudly</u><p> <i>Show the Pupil the story and say this,</i></p> <p><b>Here is a short story. I would like you to carefully read it aloud as fast as you can. Have you understood what you are supposed to do? When I say, please read the story carefully, loudly and as fast as you can. I will keep quiet as you read, are you ready? Please start.</b></p>
+
+
+<h2>Curriculum</h2>
+English Class 3 - Term 1
+English Class 3 - Term 2
+English Class 3 - Term 3
+Kiswahili Class 3 - Term 1
+Kiswahili Class 3 - Term 2
+Kiswahili Class 3 - Term 3
+
+
+<h2>Kiswahili/English Lesson Observation - without pupils books</h2>
+<h2>Kiswahili/English Lesson Observation - without pupils books</h2>
+<h2>Kiswahili/English Lesson Observation - without pupils books</h2>
+<h2>Kiswahili/English Lesson Observation - without pupils books</h2>
+
+
+<p>You have completed this Classroom Observation.</p> <button class='navigation'><a href='#feedback/#{@workflow.id}'>Go to Feedback</a></button> <p>Once in feedback select the appropriate county, zone, school and date of this school visit to retrieve the feedback for this lesson observation. This information is to be used in your reflections and discussion with the teacher.</p> <button class='navigation'><a href='#reload'>Main</a></button>
+
+        <input type="submit" value="done" >
+    </form>
+    </div>
+  </tangy-form>
+
+</body>
+</html>
